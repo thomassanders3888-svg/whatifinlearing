@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carbon Credit Exchange - Offset Your Footprint</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+body { background: #0a0a0a; color: #e5e7eb; }
+header { background: linear-gradient(135deg, #10b981, #06b6d4); padding: 50px 20px; text-align: center; }
+h1 { font-size: 2.5em; margin-bottom: 10px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+.exchange-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 20px 0; border: 1px solid #333; }
+.market-header { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.market-stat { text-align: center; padding: 20px; background: #111; border-radius: 12px; }
+.market-stat .value { font-size: 2em; font-weight: bold; color: #10b981; }
+.market-stat .label { color: #9ca3af; margin-top: 8px; }
+.trade-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 15px; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
+.trade-row:last-child { border-bottom: none; }
+.credit-type { display: flex; align-items: center; gap: 12px; }
+.credit-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3em; }
+.credit-icon.renewable { background: #10b98120; }
+.credit-icon.forestry { background: #05966920; }
+.credit-icon.methane { background: #f59e0b20; }
+.credit-icon.direct { background: #3b82f620; }
+.price { font-weight: bold; color: #10b981; }
+.price.negative { color: #ef4444; }
+.change { padding: 6px 12px; border-radius: 6px; font-size: 0.9em; }
+.change.positive { background: #10b98120; color: #10b981; }
+.change.negative { background: #ef44442; color: #ef4444; }
+.btn { padding: 12px 24px; background: linear-gradient(135deg, #10b981, #06b6d4); border: none; border-radius: 8px; color: #fff; font-weight: 600; cursor: pointer; }
+.calculator-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0; }
+.calculator-card { background: #1a1a1a; border-radius: 16px; padding: 30px; }
+.calculator-card h3 { margin-bottom: 20px; }
+.climate-impact { background: linear-gradient(135deg, #10b98120, #06b6d420); border: 1px solid #10b98140; border-radius: 16px; padding: 30px; text-align: center; }
+.impact-metric { display: inline-block; margin: 20px; }
+.impact-metric .number { font-size: 3em; font-weight: bold; color: #10b981; }
+.impact-metric .desc { color: #9ca3af; }
+.testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 40px 0; }
+.testimonial { background: #1a1a1a; border-radius: 12px; padding: 25px; }
+footer { text-align: center; padding: 40px; color: #6b7280; border-top: 1px solid #1a1a1a; }
+@media (max-width: 768px) {
+.trade-row { grid-template-columns: 1fr; gap: 10px; }
+.calculator-section { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<header>
+<h1>🌱 Carbon Credit Exchange</h1>
+<p>Buy, sell, and retire verified carbon credits for a sustainable future</p>
+</header>
+
+<div class="container">
+<div class="market-header">
+<div class="market-stat">
+<div class="value">$28.50</div>
+<div class="label">Avg. Credit Price</div>
+</div>
+<div class="market-stat">
+<div class="value">-2.4%</div>
+<div class="label">24h Change</div>
+</div>
+<div class="market-stat">
+<div class="value">14.2M</div>
+<div class="label">Credits Traded</div>
+</div>
+<div class="market-stat">
+<div class="value">387K</div>
+<div class="label">tCO₂ Retired</div>
+</div>
+</div>
+
+<div class="exchange-card">
+<h2 style="margin-bottom: 25px;">🌿 Live Carbon Markets</h2>
+<div class="trade-row" style="font-weight: 600; color: #9ca3af; border-bottom: 2px solid #333;">
+<div>Credit Type</div>
+<div>Price (USD)</div>
+<div>24h Change</div>
+<div>Available</div>
+<div></div>
+</div>
+<div class="trade-row">
+<div class="credit-type">
+<div class="credit-icon renewable">⚡</div>
+<div>
+<div style="font-weight: 600;">Renewable Energy</div>
+<div style="font-size: 0.85em; color: #9ca3af;">Wind, Solar, Hydro</div>
+</div>
+</div>
+<div class="price">$24.50</div>
+<div class="change positive">+1.2%</div>
+<div>45,230 credits</div>
+<button class="btn">Buy</button>
+</div>
+<div class="trade-row">
+<div class="credit-type">
+<div class="credit-icon forestry">🌲</div>
+<div>
+<div style="font-weight: 600;">Forestry & Conservation</div>
+<div style="font-size: 0.85em; color: #9ca3af;">Reforestation projects</div>
+</div>
+</div>
+<div class="price">$32.75</div>
+<div class="change positive">+0.8%</div>
+<div>23,100 credits</div>
+<button class="btn">Buy</button>
+</div>
+<div class="trade-row">
+<div class="credit-type">
+<div class="credit-icon methane">🏭</div>
+<div>
+<div style="font-weight: 600;">Methane Capture</div>
+<div style="font-size: 0.85em; color: #9ca3af;">Landfill & agriculture</div>
+</div>
+</div>
+<div class="price">$19.25</div>
+<div class="change negative">-0.5%</div>
+<div>67,500 credits</div>
+<button class="btn">Buy</button>
+</div>
+<div class="trade-row">
+<div class="credit-type">
+<div class="credit-icon direct">🧪</div>
+<div>
+<div style="font-weight: 600;">Direct Air Capture</div>
+<div style="font-size: 0.85em; color: #9ca3af;">DAC technology</div>
+</div>
+</div>
+<div class="price">$485.00</div>
+<div class="change positive">+3.1%</div>
+<div>1,230 credits</div>
+<button class="btn">

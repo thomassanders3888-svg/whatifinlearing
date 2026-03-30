@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoPulse | Live Crypto Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0b0e11;
+            --bg-secondary: #151920;
+            --bg-card: #1a1f29;
+            --bg-hover: #232936;
+            --text-primary: #ffffff;
+            --text-secondary: #8b95a8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f59e0b;
+            --border: #2d3645;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav {
+            background: rgba(11, 14, 17, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-blue);
+        }
+
+        main {
+            padding: 6rem 2rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ticker */
+        .ticker {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 3rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .ticker::-webkit-scrollbar { display: none; }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        .ticker-coin {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ticker-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .ticker-btc { background: linear-gradient(135deg, #f7931a, #ffad33); }
+        .ticker-eth { background: linear-gradient(135deg, #627eea, #7b93f0); }
+        .ticker-sol { background: linear-gradient(135deg, #00d4aa, #14f195); }
+
+        .ticker-price { font-weight: 600; font-size: 0.9375rem; }
+
+        .ticker-change {
+            font-size: 0.8125rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .change-up {
+            color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .change-down {
+            color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i { color: var(--accent-blue); }
+
+        .portfolio-card { grid-column: span 4; }
+        .chart-card { grid-column: span 8; }
+        .coins-card { grid-column: span 8; }
+        .quick-actions { grid-column: span 4; }
+        .exchanges { grid-column: span 4; }
+
+        /* Portfolio */
+        .portfolio-balance { margin-bottom: 1.5rem; }
+        .balance-label { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem; }
+        .balance-amount { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .eye-icon { cursor: pointer; transition: opacity 0.3s; }
+        .eye-icon:hover { opacity: 0.8; }
+
+        .change-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .change-period { color: var(--text-secondary); font-weight: 400; }
+
+        .allocation { margin-top: 1.5rem; }
+        .allocation-title { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .allocation-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .allocation-item { height: 100%; transition: width 0.3s; }
+        .allocation-legend { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; }
+        .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+        .legend-text { color: var(--text-secondary); }
+        .legend-percent { margin-left: auto; font-weight: 600; }
+
+        /* Chart Card */
+        .chart-controls { display: flex; gap: 0.5rem; }
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .chart-btn:hover, .chart-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+        .chart-container { position: relative; height: 320px; margin-top: 1rem; }
+
+        /* Coin List */
+        .coins-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 80px;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+        .coin-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 80px;
+            padding: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
+        }
+        .coin-row:hover { background: var(--bg-hover); }
+        .coin-row:last-child { border-bottom: none; }
+        .coin-info { display: flex; align-items: center; gap: 1rem; }
+        .coin-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+        }
+        .coin-icon.btc { background: linear-gradient(135deg, #f7931a, #ffad33); }
+        .coin-icon.eth { background: linear-gradient(135deg, #627eea, #7b93f0); }
+        .coin-icon.sol { background: linear-gradient(135deg, #00d4aa, #14f195); }
+        .coin-icon.xrp { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+        .coin-icon.bnb { background: linear-gradient(135deg, #ec4899, #f472b6); }
+        .coin-icon.doge { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+        .coin-name { font-weight: 600; }
+        .coin-symbol { color: var(--text-secondary); font-size: 0.8125rem; }
+        .coin-price { font-weight: 600; }
+        .coin-change { font-weight: 600; }
+        .coin-btn {
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .coin-btn:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Quick Actions */
+        .action-group { margin-bottom: 1.5rem; }
+        .action-group-title { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .action-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 0.75rem;
+        }
+        .action-btn:hover { background: var(--bg-hover); border-color: var(--accent-blue); }
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+        }
+        .action-icon.buy { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .action-icon.sell { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+        .action-icon.swap { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .action-icon.connect { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
+        .action-text { flex: 1; text-align: left; }
+        .action-title { font-weight: 600; margin-bottom: 0.125rem; }
+        .action-desc { font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* Exchanges */
+        .exchange-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .exchange-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+        .exchange-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .binance { background: #f0b90b; color: white; }
+        .coinbase { background: #0052ff; color: white; }
+        .kraken { background: #5741d7; color: white; }
+        .exchange-info { flex: 1; }
+        .exchange-name { font-weight: 600; margin-bottom: 0.125rem; }
+        .exchange-bonus { font-size: 0.75rem; color: var(--accent-green); }
+        .exchange-arrow { color: var(--text-secondary); }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 450px;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-size: 1.25rem; font-weight: 600; }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.875rem; margin-bottom: 0.5rem

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelance Rate Calculator - What to Charge?</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body { background: #0a0a0a; color: #fff; }
+        header { background: linear-gradient(135deg, #8b5cf6, #6366f1); padding: 60px 20px; text-align: center; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .calc-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 30px 0; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .form-group label { display: block; margin-bottom: 8px; color: #888; }
+        .form-group input, .form-group select { width: 100%; padding: 15px; background: #222; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 1em; }
+        .result-card { background: linear-gradient(135deg, #1a1a2e, #2d2d44); border-radius: 16px; padding: 40px; text-align: center; margin: 30px 0; }
+        .rate-display { font-size: 4em; font-weight: bold; color: #8b5cf6; }
+        .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
+        .breakdown-item { background: #0a0a0a; padding: 20px; border-radius: 12px; }
+        .breakdown-item .value { font-size: 1.5em; font-weight: bold; margin-top: 10px; }
+        .btn { padding: 15px 40px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border: none; border-radius: 8px; color: #fff; font-size: 1.1em; font-weight: 600; cursor: pointer; }
+        footer { text-align: center; padding: 40px; color: #666; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>💰 Freelance Rate Calculator</h1>
+        <p>Calculate your ideal hourly rate based on expenses and goals</p>
+    </header>
+
+    <div class="container">
+        <div class="calc-card">
+            <h2>Your Situation</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Annual Desired Income ($)</label>
+                    <input type="number" id="income" value="80000">
+                </div>
+                <div class="form-group">
+                    <label>Working Weeks/Year</label>
+                    <input type="number" id="weeks" value="48">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Hours/Week Available</label>
+                    <input type="number" id="hours" value="40">
+                </div>
+                <div class="form-group">
+                    <label>Billable %</label>
+                    <input type="number" id="billable" value="60">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Monthly Expenses ($)</label>
+                    <input type="number" id="expenses" value="3000">
+                </div>
+                <div class="form-group">
+                    <label>Tax Rate Estimate (%)</label>
+                    <input type="number" id="taxes" value="25">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Experience Level</label>
+                    <select id="experience">
+                        <option>Junior (0-2 years)</option>
+                        <option selected>Mid (3-5 years)</option>
+                        <option>Senior (6+ years)</option>
+                        <option>Expert (10+ years)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Industry</label>
+                    <select id="industry">
+                        <option selected>Web Development</option>
+                        <option>Mobile Development</option>
+                        <option>Design/UI-UX</option>
+                        <option>Data Science</option>
+                        <option>DevOps</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" onclick="calculateRate()" style="width: 100%; margin-top: 20px;">Calculate My Rate →</button>
+        </div>
+
+        <div class="result-card" id="results" style="display: none;">
+            <h2>Your Recommended Rate</h2>
+            <div class="rate-display" id="hourly-rate">$0/hr</div>
+            <p style="color: #888; margin-top: 10px;">Minimum to hit your goals</p>
+            <div class="breakdown">
+                <div class="breakdown-item">
+                    <div style="color: #888;">Daily Rate</div>
+                    <div class="value" id="daily-rate">$0</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="color: #888;">Weekly Income</div>
+                    <div class="value" id="weekly-income">$0</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="color: #888;">Monthly Need</div>
+                    <div class="value" id="monthly-need">$0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-card" style="background: #111;">
+            <h2>📊 Market Benchmarks</h2>
+            <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 15px; color: #888;">Junior Developer</td>
+                    <td style="padding: 15px; text-align: right; font-weight: bold;">$25-45/hr</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 15px; color: #888;">Mid-Level Developer</td>
+                    <td style="padding: 15px; text-align: right; font-weight: bold;">$50-85/hr</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 15px; color: #888;">Senior Developer</td>
+                    <td style="padding: 15px; text-align: right; font-weight: bold;">$90-150/hr</td>
+                </tr>
+                <tr>
+                    <td style="padding: 15px; color: #888;">Expert/Consultant</td>
+                    <td style="padding: 15px; text-align: right; font-weight: bold;">$150-300/hr</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>Use this as a starting point. Raise rates as demand grows.</p>
+    </footer>
+
+    <script>
+        function calculateRate() {
+            const income = parseFloat(document.getElementById('income').value);
+            const weeks = parseFloat(document.getElementById('weeks').value);
+            const hours = parseFloat(document.getElementById('hours').value);
+            const billable = parseFloat(document.getElementById('billable').value) / 100;
+            const expenses = parseFloat(document.getElementById('expenses').value);
+            const taxes = parseFloat(document.getElementById('taxes').value) / 100;
+
+            const billableHoursPerYear = weeks * hours * billable;
+            const totalNeeded = income + (expenses * 12);
+            const preTaxRate = totalNeeded / (1 - taxes) / billableHoursPerYear;
+            
+            document.getElementById('hourly-rate').textContent = '$' + Math.round(preTaxRate) + '/hr';
+            document.getElementById('daily-rate').textContent

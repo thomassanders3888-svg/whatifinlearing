@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Jet Charter Estimator | Get Instant Quotes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .card-glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .input-gold:focus { border-color: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2); }
+    </style>
+</head>
+<body class="gradient-bg text-white min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-white/10 bg-black/20">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">JetCharter</h1>
+                    <p class="text-xs text-gray-400">Private Aviation Estimates</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 text-sm">
+                <a href="#" class="text-gray-400 hover:text-white transition">Aircraft</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">Routes</a>
+                <a href="tel:1-800-JET-CHTR" class="text-amber-400 font-medium">1-800-JET-CHTR</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+            <!-- Estimator Form -->
+            <div>
+                <div class="mb-8">
+                    <h2 class="text-4xl font-bold mb-3">Get Your Charter Quote</h2>
+                    <p class="text-gray-400">Instant estimate for private jet flights. No commitment required.</p>
+                </div>
+
+                <form id="estimatorForm" class="card-glass rounded-2xl p-8 space-y-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Departure City</label>
+                            <input type="text" name="from" placeholder="e.g., New York" required
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Destination</label>
+                            <input type="text" name="to" placeholder="e.g., Miami" required
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Passengers</label>
+                            <select name="passengers" required
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none input-gold transition">
+                                <option value="" class="bg-slate-800">Select passengers</option>
+                                <option value="1" class="bg-slate-800">1 passenger</option>
+                                <option value="2" class="bg-slate-800">2 passengers</option>
+                                <option value="3" class="bg-slate-800">3 passengers</option>
+                                <option value="4" class="bg-slate-800">4 passengers</option>
+                                <option value="5" class="bg-slate-800">5 passengers</option>
+                                <option value="6" class="bg-slate-800">6 passengers</option>
+                                <option value="8" class="bg-slate-800">7-8 passengers</option>
+                                <option value="12" class="bg-slate-800">9-12 passengers</option>
+                                <option value="16" class="bg-slate-800">13-16 passengers</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Aircraft Type</label>
+                            <select name="aircraft" required id="aircraftSelect"
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none input-gold transition">
+                                <option value="" class="bg-slate-800">Select aircraft</option>
+                                <option value="light" class="bg-slate-800">Light Jet (4-6 pax)</option>
+                                <option value="midsize" class="bg-slate-800">Midsize Jet (6-8 pax)</option>
+                                <option value="supermid" class="bg-slate-800">Super Mid (8-10 pax)</option>
+                                <option value="heavy" class="bg-slate-800">Heavy Jet (10-16 pax)</option>
+                                <option value="airliner" class="bg-slate-800">Airliner (19-50 pax)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Travel Date</label>
+                        <input type="date" name="date" required
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none input-gold transition">
+                    </div>
+
+                    <div>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="roundtrip" class="w-5 h-5 rounded border-white/20 bg-white/5 text-amber-500 focus:ring-amber-500">
+                            <span class="text-gray-300">Round trip (return same day)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 rounded-xl font-semibold text-lg hover:from-amber-400 hover:to-orange-400 transition shadow-lg shadow-amber-500/25">
+                        Calculate Estimate
+                    </button>
+                </form>
+
+                <!-- Result Card -->
+                <div id="resultCard" class="hidden card-glass rounded-2xl p-8 mt-6 border-2 border-amber-500/30">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 011                        </svg>
+                        Your Estimate
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-3 border-b border-white/10">
+                            <span class="text-gray-400">Aircraft Type</span>
+                            <span class="font-medium" id="resAircraft">-</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/10">
+                            <span class="text-gray-400">Flight Time</span>
+                            <span class="font-medium" id="resTime">-</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/10">
+                            <span class="text-gray-400">Hourly Rate</span>
+                            <span class="font-medium" id="resRate">-</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/10">
+                            <span class="text-gray-400">Trip Type</span>
+                            <span class="font-medium" id="resTrip">-</span>
+                        </div>
+                        <div class="flex justify-between items-center py-4">
+                            <span class="text-xl font-semibold">Estimated Total</span>
+                            <span class="text-3xl font-bold text-amber-400" id="resTotal">-</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                        <p class="text-sm text-amber-200">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            This is an estimate. Final pricing may vary based on availability, positioning, and specific requirements.
+                        </p>
+                    </div>
+
+                    <button onclick="showLeadForm()" class="w-full mt-6 bg-white/10 border border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition">
+                        Get Detailed Quote
+                    </button>
+                </div>
+
+                <!-- Lead Form -->
+                <div id="leadForm" class="hidden card-glass rounded-2xl p-8 mt-6">
+                    <h3 class="text-xl font-bold mb-4">Get Your Official Quote</h3>
+                    <div class="space-y-4">
+                        <input type="text" name="name" placeholder="Full Name" required
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition">
+                        <input type="email" name="email" placeholder="Email Address" required
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition">
+                        <input type="tel" name="phone" placeholder="Phone Number" required
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition">
+                        <textarea name="notes" placeholder="Additional requirements (optional)" rows="3"
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 outline-none input-gold transition"></textarea>
+                        <button onclick="submitLead()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:from-amber-400 hover:to-orange-400 transition">
+                            Request Quote
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aircraft Info -->
+            <div class="space-y-6">
+                <div class="card-glass rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-6">Aircraft Guide</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-amber-400">Light Jet</h4>
+                                <span class="text-2xl font-bold">$3,500<span class="text-sm font-normal text-gray-400">/hr</span></span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-2">Citation CJ3, Phenom 300</p>
+                            <div class="flex gap-4 text-xs text-gray-500">
+                                <span><i class="fas fa-users mr-1"></i> 4-6 passengers</span>
+                                <span><i class="fas fa-ruler mr-1"></i> 1,500 mi range</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-amber-400">Midsize Jet</h4>
+                                <span class="text-2xl font-bold">$5,500<span class="text-sm font-normal text-gray-400">/hr</span></span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-2">Citation XLS, Hawker 800</p>
+                            <div class="flex gap-4 text-xs text-gray-500">
+                                <span><i class="fas fa-users mr-1"></i> 6-8 passengers</span>
+                                <span><i class="fas fa-ruler mr-1"></i> 2,500 mi range</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-amber-400">Heavy Jet</h4>
+                                <span class="text-2xl font-bold">$9,000<span class="text-sm font-normal text-gray-400">/hr</span></span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-2">Gulfstream G450, Global 5000</p>
+                            <div class="flex gap-4 text-xs text-gray-500">
+                                <span><i class="fas fa-users mr-1"></i> 10-16 passengers</span>
+                                <span><i class="fas fa-ruler mr-1"></i> 6,000 mi range</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="card-glass rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-amber-400 mb-1">24/7</div>
+                        <div class="text-xs text-gray-400">Support</div>
+                    </div>
+                    <div class="card-glass rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-amber-400 mb-1">15min</div>
+                        <div class="text-xs text-gray-400">Response</div>
+                    </div>
+                    <div class="card-glass rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-amber-400 mb-1">4.9</div>
+                        <div class="text-xs text-gray-400">Rating</div>
+                    </div>
+                </div

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatIfInlearing — Free Financial Education</title>
+<meta name="description" content="Free financial education: calculators, market tools, credit guides, debt payoff strategies.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0a0a0f; --card: #16161f; --border: #2a2a35; --accent: #22c55e; --accent2: #3b82f6; --text: #f0f0f5; --muted: #8a8a95; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.hero { text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); border-bottom: 1px solid var(--border); }
+.logo { font-size: 2.5rem; font-weight: 700; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.tagline { color: var(--muted); margin-top: 0.5rem; font-size: 1.1rem; }
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+h2 { text-align: center; margin: 3rem 0 1.5rem; color: var(--accent); font-size: 1.5rem; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s; }
+.tool-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.tool-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+.tool-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+.btn { display: block; padding: 0.7rem; background: var(--accent); color: var(--bg); text-decoration: none; border-radius: 6px; text-align: center; font-weight: 600; }
+footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); margin-top: 3rem; }
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="logo">WhatIfInlearing</div>
+<div class="tagline">Free Financial Education — Tools, Calculators & Insights</div>
+</header>
+<div class="container">
+<h2>💰 Financial Tools</h2>
+<div class="tools-grid">
+<div class="tool-card"><div class="tool-title">Tax-E-Software</div><div class="tool-desc">Tax calculation tools and guides</div><a class="btn" href="/tax-e-software">Open Tool</a></div>
+<div class="tool-card"><div class="tool-title">Carbon Credit Exchange</div><div class="tool-desc">Simulated carbon credit trading</div><a class="btn" href="/carbon-credits">Open Tool</a></div>
+<div class="tool-card"><div class="tool-title">LLM Cost Calculator</div><div class="tool-desc">Calculate AI API costs</div><a class="btn" href="/llm-cost-calc">Open Tool</a></div>
+<div class="tool-card"><div class="tool-title">Freelance Calculator</div><div class="tool-desc">Rate calculator with expenses</div><a class="btn" href="/freelance-calc">Open Tool</a></div>
+<div class="tool-card"><div class="tool-title">Salary Negotiator</div><div class="tool-desc">Remote salary comparison</div><a class="btn" href="/salary-negotiator">Open Tool</a></div>
+<div class="tool-card"><div class="tool-title">Startup Cost Calculator</div><div class="tool-desc">Estimate startup launch costs</div><a class="btn" href="/startup-cost-calc">Open Tool</a></div>
+</div>
+</div>
+<footer>
+<p>WhatIfInlearing © 2025 | Not financial advice</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V3KZQ8BTZM"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-V3KZQ8BTZM");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Cost Calculator</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2868508772018395" crossorigin="anonymous"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0f; color: #e4e4ee; }
+        header { text-align: center; padding: 3rem 1rem; }
+        h1 { font-size: 2rem; color: #4ef0e4; }
+        .container { max-width: 600px; margin: 0 auto; padding: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #9090a0; }
+        input[type="range"] { width: 100%; }
+        .value { color: #4ef0e4; font-weight: 600; }
+        .result { background: #141420; padding: 1.5rem; border-radius: 12px; margin-top: 2rem; text-align: center; }
+        .total { font-size: 2.5rem; font-weight: 700; color: #4ef0e4; }
+        .burn { color: #f59e0b; font-size: 1.2rem; margin-top: 0.5rem; }
+        .ad-unit { text-align: center; margin: 2rem 0; padding: 1rem; background: #141420; border-radius: 8px; }
+    </style>
+<!-- Cloudflare Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;:&quot;c57568b1f2304c588adac9e8c1c0b8ad&quot;}"></script>
+</head>
+<body>
+    <header>
+        <h1>Startup Cost Calculator</h1>
+        <p>Calculate your launch costs and monthly burn</p>
+    </header>
+
+    <div class="container">
+        <div class="ad-unit"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2868508772018395" data-ad-format="auto"></ins></div>
+
+        <div class="input-group">
+            <label>Incorporation: $<span class="value" id="corp-val">500</span></label>
+            <input type="range" min="0" max="3000" value="500" id="corp" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+            <label>Domain (annual): $<span class="value" id="domain-val">15</span></label>
+            <input type="range" min="0" max="200" value="15" id="domain" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+            <label>Hosting (3mo): $<span class="value" id="host-val">60</span></label>
+            <input type="range" min="0" max="500" value="60" id="host" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+            <label>Tools/Software: $<span class="value" id="tools-val">200</span></label>
+            <input type="range" min="0" max="2000" value="200" id="tools" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+            <label>Legal/Contracts: $<span class="value" id="legal-val">500</span></label>
+            <input type="range" min="0" max="5000" value="500" id="legal" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+            <label>Marketing/Ads: $<span class="value" id="ads-val">500</span></label>
+            <input type="range" min="0" max="5000" value="500" id="ads" oninput="calc()">
+        </div>
+
+        <div class="result">
+            <div>Total Startup Cost</div>
+            <div class="total" id="total">$1,775</div>
+            <div class="burn" id="burn">Monthly burn: ~$60</div>
+        </div>
+    </div>
+
+    <script>
+    function calc() {
+        const corp = +document.getElementById('corp').value;
+        const domain = +document.getElementById('domain').value;
+        const host = +document.getElementById('host').value;
+        const tools = +document.getElementById('tools').value;
+        const legal = +document.getElementById('legal').value;
+        const ads = +document.getElementById('ads').value;
+        
+        document.getElementById('corp-val').textContent = corp;
+        document.getElementById('domain-val').textContent = domain;
+        document.getElementById('host-val').textContent = host

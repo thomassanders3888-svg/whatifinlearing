@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker | Stay Organized</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .task-card { transition: all 0.3s ease; }
+        .task-card:hover { transform: translateY(-2px); }
+        .task-completed { text-decoration: line-through; opacity: 0.6; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .priority-high { border-left: 4px solid #ef4444; }
+        .priority-medium { border-left: 4px solid #f59e0b; }
+        .priority-low { border-left: 4px solid #22c55e; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .shake { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 bg-slate-950 flex items-center justify-center z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 w-full max-w-md mx-4">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check-double text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold">Task Tracker</h1>
+                <p class="text-slate-400">Enter password to continue</p>
+            </div>
+            <input type="password" id="passwordInput" placeholder="Password" class="w-full px-4 py-3 bg-slate-800 rounded-lg border border-slate-700 focus:border-indigo-500 outline-none mb-4">
+            <button id="loginBtn" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg font-medium hover:opacity-90 transition">Unlock</button>
+            <p id="loginError" class="text-red-400 text-sm mt-3 hidden">Incorrect password. Please try again.</p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
+            <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h1 class="text-xl font-bold">Task Tracker</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="taskCount" class="text-sm text-slate-400">0 tasks</span>
+                    <button id="logoutBtn" class="text-slate-400 hover:text-white transition"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Add Task Form -->
+        <section class="max-w-4xl mx-auto px-4 py-6">
+            <div class="bg-slate-900 rounded-xl p-4 border border-slate-800">
+                <div class="grid md:grid-cols-12 gap-4">
+                    <div class="md:col-span-4">
+                        <input type="text" id="taskTitle" placeholder="Task title..." class="w-full px-4 py-3 bg-slate-800 rounded-lg border border-slate-700 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div class="md:col-span-5">
+                        <input type="text" id="taskDesc" placeholder="Description (optional)..." class="w-full px-4 py-3 bg-slate-800 rounded-lg border border-slate-700 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <select id="taskPriority" class="w-full px-4 py-3 bg-slate-800 rounded-lg border border-slate-700 focus:border-indigo-500 outline-none">
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-1">
+                        <button id="addTaskBtn" class="w-full h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <section class="max-w-4xl mx-auto px-4 pb-4">
+            <div class="flex gap-2 overflow-x-auto">
+                <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 transition" data-filter="all">All</button>
+                <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition" data-filter="active">Active</button>
+                <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-400 border border-slate-700 hover:text-white transition" data-filter="completed">Completed</button>
+            </div>
+        </section>
+
+        <!-- Tasks List -->
+        <section class="max-w-4xl mx-auto px-4 pb-24">
+            <div id="tasksList" class="space-y-3">
+                <!-- Tasks injected here -->
+            </div>
+            <div id="emptyState" class="text-center py-12 hidden">
+                <i class="fas fa-clipboard-list text-4xl text-slate-600 mb-4"></i>
+                <p class="text-slate-400">No tasks yet. Add one above!</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 w-full max-w-sm mx-4 text-center">
+            <div class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-trash-alt text-red-400 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Delete Task?</h3>
+            <p class="text-slate-400 text-sm mb-6">This action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button id="cancelDelete" class="flex-1 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition">Cancel</button>
+                <button id="confirmDelete" class="flex-1 py-2 bg-red-500 rounded-lg hover:bg-red-600 transition">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SHA256 Hash Function
+        async function sha256(message) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Configuration
+        const CORRECT_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password"
+        let tasks = [];
+        let currentFilter = 'all';
+        let deleteTaskId = null;
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const mainApp = document.getElementById('mainApp');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const taskTitle = document.getElementById('taskTitle');
+        const taskDesc = document.getElementById('taskDesc');
+        const taskPriority = document.getElementById('taskPriority');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const tasksList = document.getElementById('tasksList');
+        const taskCount = document.getElementById('taskCount');
+        const emptyState = document.getElementById('emptyState');
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Check Auth on Load
+        const savedAuth = localStorage.getItem('taskTrackerAuth');
+        if (savedAuth === CORRECT_HASH) {
+            showApp();
+        }
+
+        // Login
+        loginBtn.addEventListener('click', async () => {
+            const hashed = await sha256(passwordInput.value);
+            if (hashed === CORRECT_HASH) {
+                localStorage.setItem('taskTrackerAuth', hashed);
+                showApp();
+            } else {
+                loginError.classList.remove('hidden');
+                passwordInput.classList.add('shake');
+                setTimeout(() => passwordInput.classList.remove('shake'), 500);
+            }
+        });
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+            loginError.classList.add('hidden');
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('taskTrackerAuth');
+            location.reload();
+        });
+
+        function showApp() {
+            loginScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            loadTasks();
+        }
+
+        // Add Task
+        addTaskBtn.addEventListener('click', addTask);
+        taskTitle.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+
+        function addTask() {
+            const title = taskTitle.value.trim();
+            if (!title) return;
+
+            const task = {
+                id: Date.now(),
+                title,
+                description: taskDesc.value.trim(),
+                priority: taskPriority.value,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+
+            tasks.unshift(task);
+            saveTasks();
+            renderTasks();
+            
+            taskTitle.value = '';
+            taskDesc.value = '';
+            taskPriority.value = 'medium';
+        }
+
+        // Complete Task
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Delete Task
+        function confirmDeleteTask(id) {
+            deleteTaskId = id;
+            deleteModal.classList.add('active');
+        }
+
+        confirmDelete.addEventListener('click', () => {
+            if (deleteTaskId) {
+                tasks = tasks.filter(t => t.id !== deleteTaskId);
+                saveTasks();
+                renderTasks();
+                deleteTaskId = null;
+            }
+            deleteModal.classList.remove('active');
+        });
+
+        cancelDelete.addEventListener('click', () => {
+            deleteTaskId = null;
+            deleteModal.classList.remove('active');
+        });
+
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) deleteModal.classList.remove('active');
+        });
+
+        // Filter Tasks
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.classList.remove('bg-indigo-500/20', 'text-indigo-400', 'border-indigo-500/30');
+                    b.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                });
+                btn.classList.add('active', 'bg-indigo-500/20', 'text-indigo-400', 'border-indigo-500/30');
+                btn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                currentFilter = btn.dataset.filter;
+                renderTasks();
+            });
+        });
+
+        // Render Tasks
+        function renderTasks(searchTerm = '') {
+            tasksList.innerHTML = '';
+            
+            let filtered = tasks.filter(t => {
+                if (currentFilter === 'active') return !t.completed;
+                if (currentFilter === 'completed') return t.completed;
+                return true;
+            });
+
+            if (searchTerm) {
+                filtered = filtered.filter(t => t.title.toLowerCase().includes(searchTerm.toLowerCase()));
+            }
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Update count
+            const active = tasks.filter(t => !t.completed).length;
+            const completed = tasks.filter(t => t.completed).length;
+            taskCount.textContent = `${active} active, ${completed} completed`;
+
+            filtered.forEach(task => {
+                const card = document.createElement('div');
+                card.className = `task-card bg-slate-900 rounded-xl p-4 border border-slate-700 hover:border-slate-600 fade-in priority-${task.priority}`;
+                
+                const priorityColors = { high: 'bg-red-500/20 text-red-400', medium: 'bg-amber-500/20 text-amber-400', low: 'bg-green-500/20 text-green-400' };
+                
+                card.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <div class="pt-1">
+                            <button onclick="toggleTask(${task.id})" class="w-6 h-6 rounded-lg border-2 ${task.completed ? 'bg-indigo-500 border-indigo-500 text-white' : 'border-slate-600 hover:border-indigo-500'} flex items-center justify-center transition">
+                                ${task.completed ? '<i class="fas fa-check text-xs"></i>' : ''}
+                            </button>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-medium ${task.completed ? 'task-completed text-slate-500' : 'text-white'} truncate">${escapeHtml(task.title)}</h3>
+                            ${task.description ? `<p class="text-sm text-slate-400 mt-1 ${task.completed ? 'task-completed' : ''}">${escapeHtml(task.description)}</p>` : ''}
+                            <div class="flex items-center gap-3 mt-2">
+                                <span class="px-2 py-1 rounded text-xs font-medium ${priorityColors[task.priority]}">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</span>
+                                <span class="text-xs text-slate-500">${formatDate(task.createdAt)}</span>
+                            </div>
+                        </div>
+                        <button onclick="confirmDeleteTask(${task.id})" class="p-2 text-slate-500 hover:text-red-400 transition">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                tasksList.appendChild(card);
+            });
+        }
+
+        // Helper functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(iso) {
+            const date = new Date(iso);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        // Storage
+        function saveTasks() {
+            localStorage.setItem('taskTrackerData', JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            const saved = localStorage.getItem('taskTrackerData');
+            if (saved) {
+                tasks = JSON.parse(saved);
+                renderTasks();
+            }
+        }
+
+        // Search
+        taskTitle.addEventListener('input', (e) => {
+            if (e.target.value.length > 2 || e.target.value === '') {
+                renderTasks(e.target.value);
+            }
+        });
+    </script>
+</body>
+</html>

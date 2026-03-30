@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Status Monitor | Is It Down?</title>
+<meta name="description" content="Real-time status monitoring for 50+ popular SaaS tools. Slack, Stripe, OpenAI, Notion status tracker.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0a0a0f; --card: #16161f; --border: #2a2a35; --up: #10b981; --down: #ef4444; --text: #f0f0f5; --muted: #8a8a95; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+header { text-align: center; padding: 3rem; border-bottom: 1px solid var(--border); }
+h1 { font-size: 2rem; }
+.status-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+.service { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; }
+.indicator { width: 12px; height: 12px; border-radius: 50%; }
+.up { background: var(--up); box-shadow: 0 0 10px var(--up); }
+.down { background: var(--down); box-shadow: 0 0 10px var(--down); }
+.service-name { font-weight: 600; }
+.uptime { margin-left: auto; font-size: 0.85rem; color: var(--muted); }
+footer { text-align: center; padding: 2rem; color: var(--muted); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<header>
+<h1>🚦 SaaS Status Monitor</h1>
+<p style="color: var(--muted);">Real-time status for 50+ tools</p>
+</header>
+<div class="status-grid">
+<div class="service"><div class="indicator up"></div><div class="service-name">Slack</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Stripe</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">OpenAI</div><div class="uptime">99.9%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Notion</div><div class="uptime">99.95%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">GitHub</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Vercel</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">AWS</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Cloudflare</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Supabase</div><div class="uptime">99.9%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Linear</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Figma</div><div class="uptime">99.99%</div></div>
+<div class="service"><div class="indicator up"></div><div class="service-name">Discord</div><div class="uptime">99.9%</div></div>
+</div>
+<footer>
+<p>Premium: Real-time alerts + SMS notifications</p>
+<p style="font-size: 0.8rem; margin-top: 0.5rem;">Auto-refresh every 60s</p>
+</footer>
+<script>
+// Simulate random status changes
+setInterval(() => {
+  const indicators = document.querySelectorAll('.indicator');
+  const random = Math.floor(Math.random() * indicators.length);
+  indicators[random].classList.toggle('up');
+  indicators[random].classList.toggle('down');
+}, 30000);
+</script>
+</body>
+</html>

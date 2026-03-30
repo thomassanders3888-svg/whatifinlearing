@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indie Revenue Calculator | When Can You Quit Your Job?</title>
+<meta name="description" content="Calculate how many customers you need to quit your job. Indie hacker runway calculator with MRR goals.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0a0a0f; --card: #16161f; --border: #2a2a35; --accent: #f59e0b; --accent2: #10b981; --text: #f0f0f5; --muted: #8a8a95; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+header { text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); }
+h1 { font-size: 2.2rem; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.container { max-width: 600px; margin: 0 auto; padding: 2rem; }
+.calculator { background: var(--card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); }
+.input-group { margin-bottom: 1.5rem; }
+label { display: block; margin-bottom: 0.5rem; color: var(--muted); }
+input { width: 100%; padding: 0.8rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; }
+.result { text-align: center; padding: 2rem; margin-top: 2rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(16, 185, 129, 0.1)); border-radius: 12px; }
+.big-number { font-size: 3rem; font-weight: 700; color: var(--accent); }
+.milestone { margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; }
+.share { margin-top: 2rem; text-align: center; }
+.btn { display: inline-block; padding: 0.8rem 1.5rem; background: var(--accent); color: var(--bg); text-decoration: none; border-radius: 6px; font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+<h1>💰 Indie Revenue Calculator</h1>
+<p style="color: var(--muted);">When can you quit your day job?</p>
+</header>
+<div class="container">
+<div class="calculator">
+<div class="input-group">
+<label>Monthly Living Expenses ($)</label>
+<input type="number" id="expenses" value="5000" onchange="calculate()">
+</div>
+<div class="input-group">
+<label>Current Monthly Salary ($)</label>
+<input type="number" id="salary" value="6000" onchange="calculate()">
+</div>
+<div class="input-group">
+<label>Savings / Runway ($)</label>
+<input type="number" id="savings" value="20000" onchange="calculate()">
+</div>
+<div class="input-group">
+<label>Average Revenue Per Customer ($/mo)</label>
+<input type="number" id="arpu" value="29" onchange="calculate()">
+</div>
+<div class="result">
+<div id="customers" class="big-number">207</div>
+<p>customers needed to replace salary</p>
+<div class="milestone">
+<strong>Escape Velocity:</strong> <span id="escape">8.5 months</span> at current savings
+</div>
+</div>
+<div class="share">
+<a class="btn" href="#" onclick="shareResult()">Share Result 🚀</a>
+</div>
+</div>
+</div>
+<script>
+function calculate() {
+  const expenses = parseFloat(document.getElementById('expenses').value) || 0;
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const savings = parseFloat(document.getElementById('savings').value) || 0;
+  const arpu = parseFloat(document.getElementById('arpu').value) || 1;
+  const needed = Math.ceil(salary / arpu);
+  document.getElementById('customers').textContent = needed.toLocaleString();
+  const months = savings / expenses;
+  document.getElementById('escape').textContent = months.toFixed(1) + ' months';
+}
+function shareResult() {
+  const needed = document.getElementById('customers').textContent;
+  const text = `I need ${needed} customers to quit my job 🚀\n\nCalculate yours:`;
+  if (navigator.share) navigator.share({text, url: window.location.href});
+  else alert('Copy this link to share: ' + window.location.href);
+}
+calculate();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# whatifinlearing .gitignore
+
+# Common web ignores
+node_modules/
+.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+*.log
+
+# Build
+ dist/
+ build/

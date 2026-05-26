@@ -2,7 +2,7 @@
 
 A beautiful, production-ready mortgage calculator built for clarity and insight.
 
-**Live Demo**: https://whatifinlearing.com (GitHub Pages)
+**Live Demo**: https://whatifinlearing.com/mortgage-calculator
 
 ## Features
 

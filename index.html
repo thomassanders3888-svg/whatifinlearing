@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What If In Learning • Mortgage Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0F172A;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .glass {
+            background: rgba(255,255,255, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            line-height: 1;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .input-focus {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-focus:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+
+        .result-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .nav-active {
+            color: #0F172A;
+            font-weight: 600;
+        }
+
+        .amortization-table {
+            font-size: 0.875rem;
+        }
+
+        .metric-change {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-slate-900 rounded-2xl flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">W</span>
+                    </div>
+                    <div>
+                        <span class="font-display text-2xl font-semibold tracking-tighter">What If In Learning</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-8 text-sm">
+                    <a href="#" class="font-medium text-slate-600 hover:text-slate-900">Calculator</a>
+                    <a href="#" class="font-medium text-slate-600 hover:text-slate-900">Guides</a>
+                    <a href="#" class="font-medium text-slate-600 hover:text-slate-900">Resources</a>
+                    <button onclick="toggleDarkMode()" 
+                            class="flex items-center justify-center w-9 h-9 rounded-2xl hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                        <i class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 pt-10 pb-16">
+        <!-- Header -->
+        <div class="max-w-2xl mb-10">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl bg-white border border-slate-200 text-sm mb-4">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span class="font-medium text-emerald-700">2026 Edition</span>
+            </div>
+            
+            <h1 class="section-header tracking-tighter">Mortgage Calculator</h1>
+            <p class="mt-3 text-xl text-slate-600">Understand the true cost of homeownership. Make smarter decisions with precise projections.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Input Panel -->
+            <div class="lg:col-span-5">
+                <div class="glass border border-slate-200 rounded-3xl p-8 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="font-semibold text-lg">Loan Parameters</h3>
+                            <p class="text-sm text-slate-500">Adjust the values below</p>
+                        </div>
+                        <button onclick="resetDefaults()" 
+                                class="text-xs px-3 py-1.5 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 flex items-center gap-x-1.5">
+                            <i class="fa-solid fa-undo text-xs"></i>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Loan Amount -->
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <label class="text-sm font-medium text-slate-700">Loan Amount</label>
+                                <span id="loan-amount-value" class="font-mono text-sm font-semibold">$350,000</span>
+                            </div>
+                            <input type="range" id="loan-amount" min="50000" max="2000000" step="1000" value="350000"
+                                   class="w-full accent-slate-900" oninput="updateCalculations()">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <div>$50k</div>
+                                <div>$2M</div>
+                            </div>
+                        </div>
+
+                        <!-- Down Payment -->
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <label class="text-sm font-medium text-slate-700">Down Payment</label>
+                                <span id="down-payment-value" class="font-mono text-sm font-semibold">$70,000 (20%)</span>
+                            </div>
+                            <input type="range" id="down-payment" min="0" max="500000" step="1000" value="70000"
+                                   class="w-full accent-slate-900" oninput="updateCalculations()">
+                        </div>
+
+                        <!-- Interest Rate -->
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <label class="text-sm font-medium text-slate-700">Interest Rate</label>
+                                <span id="interest-rate-value" class="font-mono text-sm font-semibold">6.75%</span>
+                            </div>
+                            <input type="range" id="interest-rate" min="1" max="12" step="0.125" value="6.75"
+                                   class="w-full accent-slate-900" oninput="updateCalculations()">
+                        </div>
+
+                        <!-- Loan Term -->
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <label class="text-sm font-medium text-slate-700">Loan Term</label>
+                                <span id="loan-term-value" class="font-mono text-sm font-semibold">30 years</span>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="setTerm(15)" class="term-btn flex-1 py-2 text-sm rounded-2xl border border-slate-200 hover:bg-slate-50" id="term-15">15 yr</button>
+                                <button onclick="setTerm(20)" class="term-btn flex-1 py-2 text-sm rounded-2xl border border-slate-200 hover:bg-slate-50" id="term-20">20 yr</button>
+                                <button onclick="setTerm(30)" class="term-btn flex-1 py-2 text-sm rounded-2xl bg-slate-900 text-white border border-slate-900" id="term-30">30 yr</button>
+                            </div>
+                        </div>
+
+                        <!-- Extra Payment -->
+                        <div>
+                            <div class="flex justify-between mb-1.5">
+                                <label class="text-sm font-medium text-slate-700">Extra Monthly Payment</label>
+                                <span id="extra-payment-value" class="font-mono text-sm font-semibold">$0</span>
+                            </div>
+                            <input type="range" id="extra-payment" min="0" max="2000" step="25" value="0"
+                                   class="w-full accent-slate-900" oninput="updateCalculations()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="lg:col-span-7">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Monthly Payment -->
+                    <div class="result-card bg-white border border-slate-200 rounded-3xl p-6">
+                        <div class="text-xs uppercase tracking-[0.5px] text-emerald-600 font-semibold mb-1">MONTHLY PAYMENT</div>
+                        <div id="monthly-payment" class="metric-value text-emerald-600">$2,268</div>
+                        <div class="text-xs text-slate-500 mt-3">Principal &amp; Interest</div>
+                    </div>
+
+                    <!-- Total Interest -->
+                    <div class="result-card bg-white border border-slate-200 rounded-3xl p-6">
+                        <div class="text-xs uppercase tracking-[0.5px] text-amber-600 font-semibold mb-1">TOTAL INTEREST</div>
+                        <div id="total-interest" class="metric-value">$466,280</div>
+                        <div id="interest-savings" class="text-xs text-emerald-600 mt-3 flex items-center gap-x-1">
+                            <i class="fa-solid fa-arrow-trend-down"></i>
+                            <span>$0 saved with extra payments</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Cost -->
+                    <div class="result-card bg-white border border-slate-200 rounded-3xl p-6">
+                        <div class="text-xs uppercase tracking-[0.5px] text-slate-600 font-semibold mb-1">TOTAL COST</div>
+                        <div id="total-cost" class="metric-value">$816,280</div>
+                        <div class="text-xs text-slate-500 mt-3">Over <span id="payoff-years">30</span> years</div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="glass border border-slate-200 rounded-3xl p-6 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <div class="font-semibold">Loan Balance Over Time</div>
+                            <div class="text-xs text-slate-500">Projected payoff trajectory</div>
+                        </div>
+                        <div class="text-xs px-3 py-1 bg-white rounded-2xl border text-slate-500">Balance</div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="balanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white border border-slate-200 rounded-3xl px-5 py-4 text-center">
+                        <div class="text-xs text-slate-500">Payoff Date</div>
+                        <div id="payoff-date" class="font-semibold text-lg mt-1">Mar 2056</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl px-5 py-4 text-center">
+                        <div class="text-xs text-slate-500">Total Payments</div>
+                        <div id="total-payments" class="font-semibold text-lg mt-1">360</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl px-5 py-4 text-center">
+                        <div class="text-xs text-slate-500">Interest % of Loan</div>
+                        <div id="interest-percent" class="font-semibold text-lg mt-1">133%</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl px-5 py-4 text-center">
+                        <div class="text-xs text-slate-500">Effective Rate</div>
+                        <div id="effective-rate" class="font-semibold text-lg mt-1">6.75%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amortization Table -->
+        <div class="mt-8">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div>
+                    <h3 class="font-semibold text-lg">Amortization Schedule</h3>
+                    <p class="text-sm text-slate-500">First 24 months shown • Export full schedule below</p>
+                </div>
+                <div class="flex gap-x-3">
+                    <button onclick="exportToCSV()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm rounded-2xl border border-slate-200 hover:bg-white text-slate-700">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export CSV</span>
+                    </button>
+                    <button onclick="showFullSchedule()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm rounded-2xl bg-slate-900 text-white hover:bg-slate-800">
+                        <span>View Full Schedule</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden">
+                <table class="w-full amortization-table">
+                    <thead>
+                        <tr class="bg-slate-50 border-b">
+                            <th class="text-left px-6 py-3 font-medium text-xs text-slate-500">Month</th>
+                            <th class="text-right px-4 py-3 font-medium text-xs text-slate-500">Payment</th>
+                            <th class="text-right px-4 py-3 font-medium text-xs text-slate-500">Principal</th>
+                            <th class="text-right px-4 py-3 font-medium text-xs text-slate-500">Interest</th>
+                            <th class="text-right px-4 py-3 font-medium text-xs text-slate-500">Extra</th>
+                            <th class="text-right px-6 py-3 font-medium text-xs text-slate-500">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amortization-body" class="divide-y text-sm">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-200 py-8 text-center text-xs text-slate-400">
+        Built with precision for What If In Learning • 2026
+    </footer>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0F172A');
+        }
+
+        let balanceChart = null;
+        let currentSchedule = [];
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        function calculateMortgage(principal, annualRate, years, extraMonthly = 0) {
+            const monthlyRate = annualRate / 100 / 12;
+            const numberOfPayments = years * 12;
+            
+            if (monthlyRate === 0) {
+                return {
+                    monthlyPayment: principal / numberOfPayments,
+                    totalInterest: 0,
+                    totalPayment: principal,
+                    schedule: []
+                };
+            }
+
+            const monthlyPayment = principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments) / 
+                                 (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+            
+            let balance = principal;
+            let totalInterest = 0;
+            let schedule = [];
+            let month = 1;
+            let actualPayments = 0;
+
+            while (balance > 0 && month <= numberOfPayments * 1.5) {
+                const interestPayment = balance * monthlyRate;
+                let principalPayment = monthlyPayment - interestPayment;
+                let extra = 0;
+
+                if (extraMonthly > 0) {
+                    extra = Math.min(extraMonthly, balance - principalPayment);
+                    principalPayment += extra;
+                }
+
+                if (principalPayment > balance) {
+                    principalPayment = balance;
+                    extra = 0;
+                }
+
+                const payment = principalPayment + interestPayment;
+                totalInterest += interestPayment;
+                balance -= principalPayment;
+
+                if (balance < 0) balance = 0;
+
+                schedule.push({
+                    month: month,
+                    payment: payment,
+                    principal: principalPayment,
+                    interest: interestPayment,
+                    extra: extra,
+                    balance: Math.max(0, balance)
+                });
+
+                actualPayments++;
+                if (balance <= 0) break;
+                month++;
+            }
+
+            return {
+                monthlyPayment: monthlyPayment,
+                totalInterest: totalInterest,
+                totalPayment: principal + totalInterest,
+                schedule: schedule,
+                actualPayments: actualPayments,
+                extraSavings: (numberOfPayments * monthlyPayment) - (principal + totalInterest)
+            };
+        }
+
+        function updateCalculations() {
+            const loanAmount = parseFloat(document.getElementById('loan-amount').value);
+            const downPayment = parseFloat(document.getElementById('down-payment').value);
+            const interestRate = parseFloat(document.getElementById('interest-rate').value);
+            const loanTerm = parseInt(document.getElementById('term-30').classList.contains('bg-slate-900') ? 30 : 
+                             document.getElementById('term-20').classList.contains('bg-slate-900') ? 20 : 15);
+            const extraPayment = parseFloat(document.getElementById('extra-payment').value);
+
+            const principal = loanAmount - downPayment;
+            
+            // Update labels
+            document.getElementById('loan-amount-value').textContent = formatCurrency(loanAmount);
+            document.getElementById('down-payment-value').textContent = 
+                `${formatCurrency(downPayment)} (${((downPayment / loanAmount) * 100).toFixed(0)}%)`;
+            document.getElementById('interest-rate-value').textContent = `${interestRate}%`;
+            document.getElementById('loan-term-value').textContent = `${loanTerm} years`;
+            document.getElementById('extra-payment-value').textContent = formatCurrency(extraPayment);
+
+            if (principal <= 0) {
+                document.getElementById('monthly-payment').textContent = '$0';
+                return;
+            }
+
+            const result = calculateMortgage(principal, interestRate, loanTerm, extraPayment);
+            currentSchedule = result.schedule;
+
+            // Update UI
+            document.getElementById('monthly-payment').textContent = formatCurrency(result.monthlyPayment);
+            document.getElementById('total-interest').textContent = formatCurrency(result.totalInterest);
+            document.getElementById('total-cost').textContent = formatCurrency(result.totalPayment);
+            document.getElementById('payoff-years').textContent = Math.ceil(result.actualPayments / 12);
+            document.getElementById('total-payments').textContent = result.actualPayments;
+            document.getElementById('interest-percent').textContent = 
+                ((result.totalInterest / principal) * 100).toFixed(0) + '%';
+            document.getElementById('effective-rate').textContent = interestRate + '%';
+
+            // Payoff date
+            const startDate = new Date();
+            const payoffDate = new Date(startDate.setMonth(startDate.getMonth() + result.actualPayments));
+            document.getElementById('payoff-date').textContent = formatDate(payoffDate);
+
+            // Interest savings
+            const savingsEl = document.getElementById('interest-savings');
+            if (extraPayment > 0 && result.extraSavings > 0) {
+                savingsEl.innerHTML = `<i class="fa-solid fa-arrow-trend-down"></i> <span>${formatCurrency(result.extraSavings)} saved</span>`;
+                savingsEl.className = 'text-xs text-emerald-600 mt-3 flex items-center gap-x-1';
+            } else {
+                savingsEl.innerHTML = `<i class="fa-solid fa-arrow-trend-down"></i> <span>$0 saved with extra payments</span>`;
+                savingsEl.className = 'text-xs text-slate-400 mt-3 flex items-center gap-x-1';
+            }
+
+            // Update chart
+            updateBalanceChart(result.schedule);
+
+            // Update amortization table (first 24 months)
+            updateAmortizationTable(result.schedule.slice(0, 24));
+        }
+
+        function updateBalanceChart(schedule) {
+            const ctx = document.getElementById('balanceChart');
+            
+            if (balanceChart) {
+                balanceChart.destroy();
+            }
+
+            const labels = schedule.map((row, i) => `M${row.month}`);
+            const balances = schedule.map(row => row.balance);
+
+            balanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Remaining Balance',
+                        data: balances,
+                        borderColor: '#0F172A',
+                        borderWidth: 2.5,
+                        fill: true,
+                        backgroundColor: 'rgba(15, 23, 42, 0.06)',
+                        tension: 0.35,
+                        pointRadius: 0,
+                        pointHoverRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => formatCurrency(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } },
+                        y: { 
+                            grid: { color: '#e2e8f0' },
+                            ticks: { 
+                                callback: (val) => '$' + (val / 1000) + 'k'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateAmortizationTable(schedule) {
+            const tbody = document.getElementById('amortization-body');
+            tbody.innerHTML = '';
+
+            schedule.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50';
+                tr.innerHTML = `
+                    <td class="px-6 py-3 font-medium">${row.month}</td>
+                    <td class="px-4 py-3 text-right font-mono">${formatCurrency(row.payment)}</td>
+                    <td class="px-4 py-3 text-right font-mono text-emerald-600">${formatCurrency(row.principal)}</td>
+                    <td class="px-4 py-3 text-right font-mono text-amber-600">${formatCurrency(row.interest)}</td>
+                    <td class="px-4 py-3 text-right font-mono">${row.extra > 0 ? formatCurrency(row.extra) : '-'}</td>
+                    <td class="px-6 py-3 text-right font-mono">${formatCurrency(row.balance)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function setTerm(years) {
+            // Reset all buttons
+            document.querySelectorAll('.term-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
+                btn.classList.add('border-slate-200', 'hover:bg-slate-50');
+            });
+
+            // Highlight selected
+            const btn = document.getElementById(`term-${years}`);
+            btn.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
+            btn.classList.remove('border-slate-200', 'hover:bg-slate-50');
+
+            updateCalculations();
+        }
+
+        function resetDefaults() {
+            document.getElementById('loan-amount').value = 350000;
+            document.getElementById('down-payment').value = 70000;
+            document.getElementById('interest-rate').value = 6.75;
+            document.getElementById('extra-payment').value = 0;
+
+            // Reset term to 30
+            document.querySelectorAll('.term-btn').forEach(btn => btn.classList.remove('bg-slate-900', 'text-white'));
+            document.getElementById('term-30').classList.add('bg-slate-900', 'text-white');
+
+            updateCalculations();
+        }
+
+        function exportToCSV() {
+            if (!currentSchedule.length) return;
+
+            let csv = 'Month,Payment,Principal,Interest,Extra,Balance\n';
+            currentSchedule.forEach(row => {
+                csv += `${row.month},${row.payment.toFixed(2)},${row.principal.toFixed(2)},${row.interest.toFixed(2)},${row.extra.toFixed(2)},${row.balance.toFixed(2)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mortgage-amortization-schedule.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showFullSchedule() {
+            if (!currentSchedule.length) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+                    <div class="px-8 py-6 border-b flex justify-between items-center">
+                        <div>
+                            <div class="font-semibold text-xl">Full Amortization Schedule</div>
+                            <div class="text-sm text-slate-500">${currentSchedule.length} payments</div>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="text-3xl leading-none text-slate-400 hover:text-slate-600">×</button>
+                    </div>
+                    <div class="overflow-auto flex-1 p-2">
+                        <table class="w-full text-sm">
+                            <thead class="sticky top-0 bg-white">
+                                <tr class="border-b">
+                                    <th class="px-4 py-3 text-left">Month</th>
+                                    <th class="px-4 py-3 text-right">Payment</th>
+                                    <th class="px-4 py-3 text-right">Principal</th>
+                                    <th class="px-4 py-3 text-right">Interest</th>
+                                    <th class="px-4 py-3 text-right">Extra</th>
+                                    <th class="px-4 py-3 text-right">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                ${currentSchedule.map(row => `
+                                    <tr>
+                                        <td class="px-4 py-2.5">${row.month}</td>
+                                        <td class="px-4 py-2.5 text-right font-mono">${formatCurrency(row.payment)}</td>
+                                        <td class="px-4 py-2.5 text-right font-mono text-emerald-600">${formatCurrency(row.principal)}</td>
+                                        <td class="px-4 py-2.5 text-right font-mono text-amber-600">${formatCurrency(row.interest)}</td>
+                                        <td class="px-4 py-2.5 text-right font-mono">${row.extra > 0 ? formatCurrency(row.extra) : '-'}</td>
+                                        <td class="px-4 py-2.5 text-right font-mono">${formatCurrency(row.balance)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            // In a real app we would persist this
+        }
+
+        function initializeEventListeners() {
+            // Add listeners to all range inputs
+            const inputs = ['loan-amount', 'down-payment', 'interest-rate', 'extra-payment'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateCalculations);
+            });
+
+            // Initial term button styling
+            document.getElementById('term-30').classList.add('bg-slate-900', 'text-white', 'border-slate-900');
+        }
+
+        function initializeDefaults() {
+            // Set initial values
+            document.getElementById('loan-amount').value = 350000;
+            document.getElementById('down-payment').value = 70000;
+            document.getElementById('interest-rate').value = 6.75;
+            document.getElementById('extra-payment').value = 0;
+            
+            // Set initial term
+            document.getElementById('term-30').classList.add('bg-slate-900', 'text-white');
+        }
+
+        // Boot the app
+        function init() {
+            initializeTailwind();
+            initializeDefaults();
+            initializeEventListeners();
+            updateCalculations();
+            
+            // Easter egg: console hint
+            console.log('%c[What If In Learning] Mortgage calculator ready. Try adjusting extra payments to see interest savings.', 'color:#64748b');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

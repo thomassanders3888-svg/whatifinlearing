@@ -4,27 +4,23 @@
 
 *(Name kept as-is — a nod to a certain Somali daycare meme that sparked this hub of hustle ideas.)*
 
-## 📦 What's Inside
-This repo acts as a central hub linking to dozens of micro-tools and experiments, including:
+## What's inside
+This repo is a hub of micro-tools. Start at `index.html` — the shared nav now reaches every subpage.
 
-- **AI & Productivity**: ai-side-hustle, creator-stack, prompt libraries, llm tools
-- **Finance & Revenue**: finance, indie-revenue, freelance-calc, salary-negotiate, tax-tools
-- **No-Code & SaaS**: nocode-hub, saas-monitor, saas-templates, startup-inc
-- **Marketing & Deals**: couponhub, coupon-deals, marketing-tools
-- **Energy & Advocacy**: carbon, nuke-calc, nuke-jobs, remote-visa
-- **Utilities**: calendly-alts, charter-est, crypto-dash, tasks
+- **Worth Adventure** (`/worth-adventure/`): year-by-year net-worth life sim. Markets, layoffs, roofs, kids, FIRE.
+- **Attune** (`/attune/`): daily Gottman relationship practice.
+- **Finance**: freelance-calc, tax-software, salary-negotiate, startup-cost, indie-revenue, crypto, carbon
+- **Build**: ai-side-hustle, creator-stack, nocode-hub, saas-monitor, saas-templates, startup-inc, marketing-tools
+- **Career**: nuke-jobs, nuke-calc, remote-visa
+- **Utilities**: calendly-alts, charter, couponhub, tasks
 
-## 🚀 Purpose
-Quick prototypes and practical tools for indie builders, side-hustlers, and curious minds. Many are HTML/JS single-file experiments ready to fork and extend.
+Shared chrome lives in `nav.js` and is included on every HTML page.
 
-## 🛠 Tech
-Mostly vanilla HTML, CSS, JS. Easy to run locally or deploy via GitHub Pages.
+## Tech
+Vanilla HTML, CSS, JS. Easy to run locally or deploy via GitHub Pages.
 
-## 📖 How to Use
-Browse the subfolders or start with `index.html` for an overview. Each tool is self-contained.
-
-## 🤝 Get Involved
-Fork, remix, or suggest new hustle ideas via issues. Let's build more cool stuff!
+## How to use
+Open `index.html`, or jump straight to `/worth-adventure/` to play.
 
 ---
-*Built with ❤️ and a sense of humor | May 2026*
+*Not financial advice.*

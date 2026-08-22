@@ -3,83 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WhatIfInlearing — Free Financial Education</title>
-<meta name="description" content="Free financial education: calculators, market tools, credit guides, debt payoff strategies.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>WhatIfInlearing — Worth Adventure and free money tools</title>
+<meta name="description" content="Free financial education hub: Worth Adventure life sim, calculators, career tools, and creator resources.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root { --bg: #0a0a0f; --card: #16161f; --border: #2a2a35; --accent: #22c55e; --accent2: #3b82f6; --text: #f0f0f5; --muted: #8a8a95; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-.hero { text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); border-bottom: 1px solid var(--border); }
-.logo { font-size: 2.5rem; font-weight: 700; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.tagline { color: var(--muted); margin-top: 0.5rem; font-size: 1.1rem; }
-.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-h2 { text-align: center; margin: 3rem 0 1.5rem; color: var(--accent); font-size: 1.5rem; }
-.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-.tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s; }
-.tool-card:hover { transform: translateY(-2px); border-color: var(--accent); }
-.tool-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-.tool-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
-.btn { display: block; padding: 0.7rem; background: var(--accent); color: var(--bg); text-decoration: none; border-radius: 6px; text-align: center; font-weight: 600; }
-footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); margin-top: 3rem; }
+:root {
+  --bg:#0c0d10; --surface:#14151a; --elevated:#1c1d24; --fg:#ece8e1;
+  --muted:#9a958c; --subtle:#6e6a64; --accent:#8fa39a; --line:#2a2b32;
+  --display:"Fraunces", Georgia, serif; --sans:"Figtree", system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.5; }
+h1,h2,h3 { font-family: var(--display); letter-spacing: -.03em; font-weight: 600; text-wrap: balance; }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 72rem; margin: 0 auto; padding: 2.5rem 1.1rem 4rem; }
+.hero { display: grid; gap: 1.5rem; padding: 2.2rem; background: var(--surface); border: 1px solid var(--line); border-radius: 1.75rem; }
+@media (min-width: 800px) { .hero { grid-template-columns: 1.2fr 1fr; padding: 2.8rem; } }
+.kicker { font-size: .72rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--subtle); }
+.hero h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); margin: .4rem 0 0; }
+.lede { color: var(--muted); margin-top: 1rem; max-width: 36rem; }
+.row { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.4rem; }
+.btn { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.1rem; border-radius: .6rem; font-weight: 600; font-size: .95rem; }
+.btn-solid { background: var(--fg); color: var(--bg); }
+.btn-ghost { border: 1px solid var(--line); color: var(--fg); }
+.panel { background: var(--elevated); border-radius: 1.1rem; padding: 1.2rem 1.3rem; border: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
+.panel ol { margin: .8rem 0 0 1.1rem; display: grid; gap: .55rem; }
+.sec { margin-top: 3rem; }
+.sec h2 { font-size: 1.6rem; }
+.sec p { color: var(--muted); font-size: .92rem; margin-top: .25rem; }
+.grid { display: grid; gap: .85rem; margin-top: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 1.25rem; padding: 1.2rem 1.25rem; min-height: 8.5rem; display: flex; flex-direction: column; }
+.card:hover { background: var(--elevated); }
+.card h3 { font-size: 1.15rem; }
+.card p { color: var(--muted); font-size: .9rem; margin-top: .4rem; flex: 1; }
+.card span { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--subtle); margin-top: .8rem; }
+footer { text-align: center; color: var(--subtle); padding: 2.5rem 1rem; border-top: 1px solid var(--line); margin-top: 3rem; font-size: .85rem; }
 </style>
 </head>
 <body>
-<nav style="background:#16161f;border-bottom:1px solid #2a2a35;padding:0.9rem 1.2rem;display:flex;flex-wrap:wrap;justify-content:center;gap:1.1rem;font-size:0.95rem;">
-<a href="/" style="color:#f0f0f5;text-decoration:none;font-weight:600;">Home</a>
-<a href="/attune/" style="color:#22c55e;text-decoration:none;font-weight:600;">Attune</a>
-<a href="/freelance-calc" style="color:#8a8a95;text-decoration:none;">Freelance</a>
-<a href="/tax-e-software" style="color:#8a8a95;text-decoration:none;">Tax</a>
-</nav>
-<header class="hero">
-<div class="logo">WhatIfInlearing</div>
-<div class="tagline">Free Financial Education — Tools, Calculators & Insights</div>
-</header>
-<div class="container">
-<h2>💰 Financial Tools</h2>
-<div class="tools-grid">
-<div class="tool-card"><div class="tool-title">Attune</div><div class="tool-desc">Daily Gottman relationship practice from The Science of Trust and the Seven Principles</div><a class="btn" href="/attune/">Open Tool</a></div><div class="tool-card"><div class="tool-title">Tax-E-Software</div><div class="tool-desc">Tax calculation tools and guides</div><a class="btn" href="/tax-e-software">Open Tool</a></div>
-<div class="tool-card"><div class="tool-title">Carbon Credit Exchange</div><div class="tool-desc">Simulated carbon credit trading</div><a class="btn" href="/carbon-credits">Open Tool</a></div>
-<div class="tool-card"><div class="tool-title">LLM Cost Calculator</div><div class="tool-desc">Calculate AI API costs</div><a class="btn" href="/llm-cost-calc">Open Tool</a></div>
-<div class="tool-card"><div class="tool-title">Freelance Calculator</div><div class="tool-desc">Rate calculator with expenses</div><a class="btn" href="/freelance-calc">Open Tool</a></div>
-<div class="tool-card"><div class="tool-title">Salary Negotiator</div><div class="tool-desc">Remote salary comparison</div><a class="btn" href="/salary-negotiator">Open Tool</a></div>
-<div class="tool-card"><div class="tool-title">Startup Cost Calculator</div><div class="tool-desc">Estimate startup launch costs</div><a class="btn" href="/startup-cost-calc">Open Tool</a></div>
-</div>
-</div>
-<footer>
-<p>WhatIfInlearing © 2025 | Not financial advice</p>
-</footer>
+<script src="/nav.js" defer></script>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="kicker">New</p>
+      <h1>Worth Adventure</h1>
+      <p class="lede">A year-by-year net-worth life. Promotions, layoffs, roofs, kids, crashes. You choose the boring moves that actually compound.</p>
+      <div class="row">
+        <a class="btn btn-solid" href="/worth-adventure/">Play the years</a>
+        <a class="btn btn-ghost" href="/attune/">Attune</a>
+      </div>
+    </div>
+    <div class="panel">
+      <p class="kicker">A life, compressed</p>
+      <ol>
+        <li>Pick a starting life — graduate, mid-career, high earner, or a restart.</li>
+        <li>Each year the market rolls. Then something uninvited usually does too.</li>
+        <li>Kill expensive debt, fund the boring pile, or buy a toy that shrinks.</li>
+        <li>Cross 25× expenses and work becomes optional.</li>
+      </ol>
+    </div>
+  </section>
 
+  <section class="sec" id="finance">
+    <h2>Finance</h2>
+    <p>Money math you can actually use.</p>
+    <div class="grid">
+      <a class="card" href="/freelance-calc/"><h3>Freelance Rate</h3><p>Price your hours against expenses, taxes, and billable time.</p><span>Open</span></a>
+      <a class="card" href="/tax-software/"><h3>Tax Tools</h3><p>Quick tax estimates and filing orientation.</p><span>Open</span></a>
+      <a class="card" href="/salary-negotiate/"><h3>Salary Negotiator</h3><p>Compare remote offers and practice the ask.</p><span>Open</span></a>
+      <a class="card" href="/startup-cost/"><h3>Startup Cost</h3><p>Estimate what it actually costs to launch.</p><span>Open</span></a>
+      <a class="card" href="/indie-revenue/"><h3>Indie Revenue</h3><p>Model creator and product income mixes.</p><span>Open</span></a>
+      <a class="card" href="/crypto/"><h3>Crypto Dash</h3><p>A market snapshot for the curious, not the reckless.</p><span>Open</span></a>
+      <a class="card" href="/carbon/"><h3>Carbon Credits</h3><p>Simulated carbon trading desk.</p><span>Open</span></a>
+    </div>
+  </section>
 
-<!-- PayPal Button -->
-<div style="text-align: center; margin: 30px 0;">
-    <div id="paypal-button-container"></div>
-</div>
-<script src="https://www.paypal.com/sdk/js?client-id=TEST&currency=USD"></script>
-<script>
-    paypal.Buttons({
-        style: {
-            shape: 'rect',
-            color: 'gold',
-            layout: 'vertical',
-            label: 'paypal'
-        },
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '5.00' // $5.00
-                    }
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                alert('Transaction completed by ' + details.payer.name.given_name);
-                // Here you would typically show success content or redirect
-            });
-        }
-    }).render('#paypal-button-container');
-</script>
+  <section class="sec" id="build">
+    <h2>Build</h2>
+    <p>Hustles, software, and shipping.</p>
+    <div class="grid">
+      <a class="card" href="/ai-side-hustle/"><h3>AI Side Hustle</h3><p>Find a small AI-powered income experiment.</p><span>Open</span></a>
+      <a class="card" href="/creator-stack/"><h3>Creator Stack</h3><p>Tools for people who ship in public.</p><span>Open</span></a>
+      <a class="card" href="/nocode-hub/"><h3>No-Code Hub</h3><p>Ship without a full engineering team.</p><span>Open</span></a>
+      <a class="card" href="/nocode-tools/"><h3>No-Code Tools</h3><p>A tighter marketplace of builders.</p><span>Open</span></a>
+      <a class="card" href="/saas-monitor/"><h3>SaaS Monitor</h3><p>Watch the stack you already pay for.</p><span>Open</span></a>
+      <a class="card" href="/saas-templates/"><h3>SaaS Templates</h3><p>Starting points instead of blank pages.</p><span>Open</span></a>
+      <a class="card" href="/startup-inc/"><h3>Startup Inc</h3><p>Incorporation and early-company checklist.</p><span>Open</span></a>
+      <a class="card" href="/marketing-tools/"><h3>Marketing Tools</h3><p>Distribution experiments that stay cheap.</p><span>Open</span></a>
+    </div>
+  </section>
+
+  <section class="sec" id="career">
+    <h2>Career & life</h2>
+    <p>Work, visas, and the house you live in.</p>
+    <div class="grid">
+      <a class="card" href="/attune/"><h3>Attune</h3><p>Daily Gottman practice from The Science of Trust.</p><span>Open</span></a>
+      <a class="card" href="/nuke-jobs/"><h3>Nuclear Jobs</h3><p>Openings and paths in nuclear energy.</p><span>Open</span></a>
+      <a class="card" href="/nuke-calc/"><h3>Nuke Calc</h3><p>Study and career calculators for the field.</p><span>Open</span></a>
+      <a class="card" href="/remote-visa/"><h3>Remote Visa</h3><p>Where remote work and residency can meet.</p><span>Open</span></a>
+    </div>
+  </section>
+
+  <section class="sec" id="utilities">
+    <h2>Utilities</h2>
+    <p>Small tools, kept handy.</p>
+    <div class="grid">
+      <a class="card" href="/calendly-alts/"><h3>Calendly Alts</h3><p>Scheduling tools without the default tax.</p><span>Open</span></a>
+      <a class="card" href="/charter/"><h3>Charter Estimate</h3><p>Price a boat day before you commit.</p><span>Open</span></a>
+      <a class="card" href="/couponhub/"><h3>Coupon Hub</h3><p>Deals, stacked without the junk mail.</p><span>Open</span></a>
+      <a class="card" href="/tasks/"><h3>Task Tracker</h3><p>A quiet list that stays on this device.</p><span>Open</span></a>
+    </div>
+  </section>
+</main>
+<footer>WhatIfInlearing · Worth Adventure · Not financial advice</footer>
 </body>
 </html>

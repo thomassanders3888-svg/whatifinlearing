@@ -83,5 +83,17 @@
         
         document.getElementById('corp-val').textContent = corp;
         document.getElementById('domain-val').textContent = domain;
-        document.getElementById('host-val').textContent = host
+        document.getElementById('host-val').textContent = host;
+        document.getElementById('tools-val').textContent = tools;
+        document.getElementById('legal-val').textContent = legal;
+        document.getElementById('ads-val').textContent = ads;
+        const total = corp + domain + host + tools + legal + ads;
+        document.getElementById('total').textContent = '$' + total.toLocaleString();
+        const monthly = Math.round(host / 3 + tools / 12 + domain / 12 + ads / 6);
+        document.getElementById('burn').textContent = 'Monthly burn: ~$' + monthly;
+    }
+    calc();
+    </script>
 <script src="/nav.js" defer></script>
+</body>
+</html>

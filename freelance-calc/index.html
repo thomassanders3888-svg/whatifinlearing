@@ -147,5 +147,12 @@
             const preTaxRate = totalNeeded / (1 - taxes) / billableHoursPerYear;
             
             document.getElementById('hourly-rate').textContent = '$' + Math.round(preTaxRate) + '/hr';
-            document.getElementById('daily-rate').textContent
+            document.getElementById('daily-rate').textContent = '$' + Math.round(preTaxRate * 8);
+            document.getElementById('weekly-income').textContent = '$' + Math.round(preTaxRate * hours * billable);
+            document.getElementById('monthly-need').textContent = '$' + Math.round(totalNeeded / 12);
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
 <script src="/nav.js" defer></script>
+</body>
+</html>

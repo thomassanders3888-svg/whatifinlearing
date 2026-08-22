@@ -41,7 +41,6 @@ input,select{width:100%;height:2.75rem;border-radius:.5rem;border:1px solid var(
 </style>
 </head>
 <body>
-<script src="/nav.js" defer></script>
 <div class="wrap">
   <div id="title" class="screen on" style="text-align:center;padding:3rem 0">
     <p class="kicker">WhatIfInlearing</p>
@@ -105,7 +104,7 @@ input,select{width:100%;height:2.75rem;border-radius:.5rem;border:1px solid var(
 <div id="toast" style="position:fixed;bottom:1rem;right:1rem;display:none;background:var(--elev);border:1px solid var(--line);padding:.7rem 1rem;border-radius:.7rem"></div>
 <script>
 const KEY="worth-adventure-v2";
-const LBASE={lean:34,comfortable:56,splashy:88};
+const LBASE={lean:22,comfortable:38,splashy:58}; const RENT={lean:14,comfortable:20,splashy:32};
 const SCEN=[
   {id:"graduate",title:"Fresh diploma",kicker:"Age 23",body:"First paycheck, loans, a used car. Time is the asset.",d:{age:23,income:58,cash:6,stocks:4,home:0,mort:0,stu:32,cc:3,veh:8,life:"lean",kids:0}},
   {id:"midcareer",title:"Mid-career grind",kicker:"Age 35",body:"A house, a 401(k), a card you keep meaning to kill.",d:{age:35,income:95,cash:22,stocks:90,home:380,mort:260,stu:8,cc:9,veh:18,life:"comfortable",kids:0}},
@@ -138,7 +137,7 @@ function nw(s){return s.cash+s.stocks+s.bonds+s.home+s.rental+s.veh-(s.mort+s.rm
 function debt(s){return s.mort+s.rmort+s.aloan+s.stu+s.cc+s.oth}
 function fireN(s){return s.exp*25}
 function fireP(s){const t=fireN(s);return t<=0?0:clamp(100*(s.stocks+s.bonds)/t,0,999)}
-function expOf(life,kids,y){return (LBASE[life]+kids*11)*Math.pow(1.026,y)}
+function expOf(life,kids,y,home){const inf=Math.pow(1.026,y);return (LBASE[life]+kids*11)*inf+(home?0:RENT[life]*inf)}
 function tax(inc){return Math.min(inc,176)*0.0765+inc*(0.1+0.18*clamp(inc/220,0,1))}
 function amort(bal,rate,yrs,extra=0){if(bal<.05)return {pay:0,nb:0,yl:0};const r=rate/12,n=Math.max(1,Math.round(yrs*12));const m=(bal*r)/(1-Math.pow(1+r,-n));const pay=m*12,int=bal*rate,prin=Math.min(bal,Math.max(0,pay-int)+extra);const nb=Math.max(0,bal-prin);return {pay,nb,yl:nb<.05?0:Math.max(0,yrs-1)}}
 function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";setTimeout(()=>el.style.display="none",1800)}
@@ -147,7 +146,7 @@ function snap(){return JSON.parse(JSON.stringify(S))}
 function create(){
   const sc=SCEN.find(x=>x.id===scenario); const d=sc.d;
   rngN=1;
-  S={seed:(Date.now()>>>0),name:document.getElementById("name").value||"Alex",age:d.age,start:d.age,year:2026,income:d.income,exp:expOf(d.life,d.kids,0),life:d.life,cash:d.cash,stocks:d.stocks,bonds:0,home:d.home,mort:d.mort,mY:d.mort?27:0,rental:0,rmort:0,rY:0,rin:0,veh:d.veh,aloan:d.veh>15?Math.round(d.veh*.45):0,aY:d.veh>15?4:0,stu:d.stu,cc:d.cc,oth:0,hustle:0,kids:d.kids,job:"employed",unemp:0,market:"steady",hist:[],log:[sc.title+" begins."],badges:[],score:0,phase:"year",event:null,sum:null,contrib:.08};
+  S={seed:(Date.now()>>>0),name:document.getElementById("name").value||"Alex",age:d.age,start:d.age,year:2026,income:d.income,exp:expOf(d.life,d.kids,0,d.home>10),life:d.life,cash:d.cash,stocks:d.stocks,bonds:0,home:d.home,mort:d.mort,mY:d.mort?27:0,rental:0,rmort:0,rY:0,rin:0,veh:d.veh,aloan:d.veh>15?Math.round(d.veh*.45):0,aY:d.veh>15?4:0,stu:d.stu,cc:d.cc,oth:0,hustle:0,kids:d.kids,job:"employed",unemp:0,market:"steady",hist:[],log:[sc.title+" begins."],badges:[],score:0,phase:"year",event:null,sum:null,contrib:.08};
   S.hist.push({age:S.age,nw:nw(S)});
   maybeEvent();
 }
@@ -190,15 +189,15 @@ function act(id){
   if(id==="paymort") pay(15,"mort");
   if(id==="stocks"){const n=Math.min(15,S.cash-1);S.cash-=n;S.stocks+=n;S.log.unshift("Bought stocks")}
   if(id==="bonds"){const n=Math.min(12,S.cash-1);S.cash-=n;S.bonds+=n}
-  if(id==="house"){S.cash-=55;S.home=320;S.mort=256;S.mY=30;S.exp=Math.max(28,S.exp-10);badge("Keys")}
+  if(id==="house"){S.cash-=55;S.home=320;S.mort=256;S.mY=30;S.exp=expOf(S.life,S.kids,S.age-S.start,true);badge("Keys")}
   if(id==="rental"){S.cash-=48;S.rental=210;S.rmort=158;S.rY=30;S.rin=9;badge("Landlord")}
   if(id==="hustle"){S.cash-=3;S.hustle=Math.min(32,S.hustle+8);badge("Hustle")}
   if(id==="course"){S.cash-=4;S.income*=1.07}
   if(id==="sellcar"){const p=Math.max(3,S.veh*.7);S.veh=Math.max(0,S.veh-p);const l=Math.min(S.aloan,p);S.aloan-=l;S.cash+=p-l}
   if(id==="buycar"){S.veh+=28;S.aloan+=26;S.aY=5;S.score-=16}
-  if(id==="lean"){S.life="lean";S.exp=expOf("lean",S.kids,S.age-S.start)}
-  if(id==="comf"){S.life="comfortable";S.exp=expOf("comfortable",S.kids,S.age-S.start)}
-  if(id==="splash"){S.life="splashy";S.exp=expOf("splashy",S.kids,S.age-S.start);S.score-=8}
+  if(id==="lean"){S.life="lean";S.exp=expOf("lean",S.kids,S.age-S.start,S.home>10)}
+  if(id==="comf"){S.life="comfortable";S.exp=expOf("comfortable",S.kids,S.age-S.start,S.home>10)}
+  if(id==="splash"){S.life="splashy";S.exp=expOf("splashy",S.kids,S.age-S.start,S.home>10);S.score-=8}
   render();
 }
 function badge(b){if(!S.badges.includes(b)){S.badges.push(b);S.score+=40}}
@@ -218,7 +217,7 @@ function live(){
   const gross=(S.job==="employed"?S.income:0)+S.hustle+S.rin;
   if(S.job==="employed") S.income*=1.02+ (rnd()<.12?0.04:0);
   const taxes=tax(gross);
-  const contrib=S.job==="employed"?S.income*S.contrib:0;
+  const contribRaw=S.job==="employed"?S.income*S.contrib:0; const contrib=(S.cash/(S.exp/12)<3)?contribRaw*0.35:contribRaw;
   const match=S.job==="employed"?Math.min(contrib,S.income*.03):0;
   S.stocks+=contrib+match;
   const mort=amort(S.mort,.065,S.mY); S.mort=mort.nb; S.mY=mort.yl;
@@ -227,7 +226,7 @@ function live(){
   const stuPay=S.stu>0?Math.max(S.stu*.04,1.2):0; S.stu=Math.max(0,S.stu*1.055-stuPay);
   const ccMin=S.cc>0?Math.max(S.cc*.03,.6):0; S.cc=Math.max(0,S.cc*1.22-ccMin);
   const othPay=S.oth>0?Math.max(S.oth*.08,.8):0; S.oth=Math.max(0,S.oth*1.07-othPay);
-  S.exp=expOf(S.life,S.kids,S.age-S.start+1);
+  S.exp=expOf(S.life,S.kids,S.age-S.start+1,S.home>10);
   const ds=mort.pay+rm.pay+au.pay+stuPay+ccMin+othPay;
   let sav=gross-taxes-S.exp-ds-contrib;
   S.cash+=sav;
@@ -296,5 +295,6 @@ function draw(){
 }
 boot();
 </script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

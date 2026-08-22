@@ -3,5 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Salary Negotiator — WhatIfInlearing</title>
+<meta name="description" content="Compare a current job against an offer. Remote, equity, and the real raise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0d10;--surface:#14151a;--elev:#1c1d24;--fg:#ece8e1;--muted:#9a958c;--subtle:#6e6a64;--accent:#8fa39a;--line:#2a2b32;--good:#7d9a86;--bad:#c45c4a}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--fg);font-family:Figtree,system-ui,sans-serif;line-height:1.5}
+h1,h2{font-family:Fraunces,Georgia,serif;letter-spacing:-.03em;font-weight:600}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.1rem 4rem}
+.muted{color:var(--muted)}
+.kicker{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--subtle);font-weight:500}
+.grid{display:grid;gap:1rem;margin-top:1.2rem}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:1.25rem;padding:1.2rem}
+label{display:block;margin:.75rem 0;font-size:.9rem;color:var(--muted)}
+input{width:100%;height:2.75rem;margin-top:.3rem;border-radius:.5rem;border:1px solid var(--line);background:var(--elev);color:var(--fg);padding:0 .7rem;font:inherit}
+.stat{font-family:Fraunces,serif;font-size:1.8rem}
+.good{color:var(--good)} .bad{color:var(--bad)}
+.btn{min-height:2.75rem;padding:0 1.1rem;border:0;border-radius:.55rem;background:var(--fg);color:var(--bg);font:inherit;font-weight:600;cursor:pointer;margin-top:1rem}
+.note{margin-top:1rem;color:var(--muted);font-size:.92rem}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="kicker">Finance</p>
+  <h1>Salary Negotiator</h1>
+  <p class="muted" style="margin-top:.6rem;max-width:36rem">An offer is not a vibe. Put both packages in dollars, then decide whether to ask, walk, or stay.</p>
+  <div class="grid">
+    <div class="card">
+      <h2>Current</h2>
+      <label>Base<input id="cbase" type="number" value="95000"></label>
+      <label>Bonus %<input id="cbonus" type="number" value="10"></label>
+      <label>Equity / year<input id="ceq" type="number" value="8000"></label>
+      <label>Remote days / week<input id="crem" type="number" value="2"></label>
+    </div>
+    <div class="card">
+      <h2>Offer</h2>
+      <label>Base<input id="obase" type="number" value="118000"></label>
+      <label>Bonus %<input id="obonus" type="number" value="15"></label>
+      <label>Equity / year<input id="oeq" type="number" value="18000"></label>
+      <label>Remote days / week<input id="orem" type="number" value="5"></label>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <p class="kicker">Total compensation</p>
+    <p>Current <b id="ctot" class="stat"></b></p>
+    <p>Offer <b id="otot" class="stat"></b></p>
+    <p id="delta" class="stat" style="margin-top:.6rem"></p>
+    <p class="note" id="ask"></p>
+    <p class="note">Remote days are priced at 1.5% of base each, a rough commute tax — not a moral claim.</p>
+    <button class="btn" type="button" onclick="run()">Recalculate</button>
+  </div>
+</main>
+<script>
+function n(id){return +document.getElementById(id).value||0}
+function money(x){return x.toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0})}
+function pack(base,bonus,eq,rem){return base*(1+bonus/100)+eq+base*0.015*rem}
+function run(){
+  const c=pack(n("cbase"),n("cbonus"),n("ceq"),n("crem"));
+  const o=pack(n("obase"),n("obonus"),n("oeq"),n("orem"));
+  document.getElementById("ctot").textContent=money(c);
+  document.getElementById("otot").textContent=money(o);
+  const d=o-c, pct=c?100*d/c:0;
+  const el=document.getElementById("delta");
+  el.textContent=(d>=0?"+":"")+money(d)+" ("+pct.toFixed(1)+"%)";
+  el.className="stat "+(d>=0?"good":"bad");
+  const ask=document.getElementById("ask");
+  if(pct<8) ask.textContent="Smaller than a cost-of-living shrug. Ask for 12–15% more base, or stay.";
+  else if(pct<20) ask.textContent="Real raise. You can still ask for a signing bonus without being theatrical.";
+  else ask.textContent="This is a life-changing number. Confirm the equity vesting and then take the win.";
+}
+run();
+</script>
 <script src="/nav.js" defer></script>
+</body>
+</html>

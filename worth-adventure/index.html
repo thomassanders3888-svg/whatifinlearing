@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Worth Adventure — WhatIfInlearing</title>
+<meta name="description" content="Year-by-year net worth life simulator. Markets swing, bills hit, fortunes compound.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0d10;--surface:#14151a;--elev:#1c1d24;--fg:#ece8e1;--muted:#9a958c;--subtle:#6e6a64;--accent:#8fa39a;--line:#2a2b32;--good:#7d9a86;--bad:#c45c4a;--warn:#b89a5a}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--fg);font-family:Figtree,system-ui,sans-serif;line-height:1.5;min-height:100%}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;letter-spacing:-.03em;font-weight:600}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:72rem;margin:0 auto;padding:1.4rem 1.1rem 4rem}
+.muted{color:var(--muted)} .subtle{color:var(--subtle)}
+.kicker{font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--subtle)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:1.25rem;padding:1.1rem 1.2rem}
+.grid{display:grid;gap:.75rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.btn{min-height:2.75rem;padding:.5rem 1rem;border-radius:.55rem;border:1px solid transparent;font-weight:600}
+.btn-solid{background:var(--fg);color:var(--bg)}
+.btn-ghost{background:transparent;border-color:var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.bar{height:.65rem;background:var(--elev);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .5s}
+.move{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:.8rem;padding:.85rem}
+.move:hover:not(:disabled){background:var(--elev)}
+.move .why{font-size:.75rem;color:var(--subtle)}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:.15rem .6rem;font-size:.75rem;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+input,select{width:100%;height:2.75rem;border-radius:.5rem;border:1px solid var(--line);background:var(--elev);color:var(--fg);padding:0 .7rem}
+.tabnums{font-variant-numeric:tabular-nums}
+.choice{width:100%;text-align:left;margin-top:.4rem}
+#chart{width:100%;height:220px}
+.screen{display:none} .screen.on{display:block}
+.stat b{display:block;font-family:Fraunces,serif;font-size:1.25rem}
+</style>
+</head>
+<body>
+<script src="/nav.js" defer></script>
+<div class="wrap">
+  <div id="title" class="screen on" style="text-align:center;padding:3rem 0">
+    <p class="kicker">WhatIfInlearing</p>
+    <h1 style="font-size:clamp(2.4rem,5vw,3.6rem);margin:.4rem 0 0">Worth Adventure</h1>
+    <p class="muted" style="max-width:28rem;margin:1rem auto">A year-by-year life. Markets swing. Roofs fail. The only score that matters is still being solvent.</p>
+    <div class="row" style="justify-content:center;margin-top:1.5rem">
+      <button class="btn btn-solid" onclick="show('setup')">New life</button>
+      <button class="btn btn-ghost" id="continueBtn" style="display:none" onclick="continueSave()">Continue</button>
+    </div>
+  </div>
+
+  <div id="setup" class="screen">
+    <button class="btn btn-ghost" onclick="show('title')">Back</button>
+    <h1 style="margin:.8rem 0 .3rem">Pick a starting life</h1>
+    <p class="muted">Four doors. Same physics.</p>
+    <div class="grid g2" id="scenarios" style="margin-top:1.2rem"></div>
+    <div class="card" style="margin-top:1rem">
+      <label>What we call you<input id="name" value="Alex"></label>
+    </div>
+    <button class="btn btn-solid" style="margin-top:1rem" onclick="start()">Start the years</button>
+  </div>
+
+  <div id="play" class="screen">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <p class="kicker" id="meta"></p>
+        <h1 class="tabnums" id="nw" style="font-size:clamp(2rem,4vw,3rem)"></h1>
+        <p class="muted" id="fireline"></p>
+      </div>
+      <div class="row">
+        <button class="btn btn-ghost" onclick="undo()">Undo</button>
+        <button class="btn btn-ghost" onclick="save();toast('Saved')">Save</button>
+        <button class="btn btn-ghost" onclick="reset()">Reset</button>
+      </div>
+    </div>
+    <div class="bar" style="margin:1rem 0"><i id="firebar"></i></div>
+    <div class="grid g4" id="stats"></div>
+    <div id="eventBox" class="card" style="margin-top:1rem;display:none"></div>
+    <div id="recapBox" class="card" style="margin-top:1rem;display:none"></div>
+    <div id="yearBox" style="margin-top:1.2rem">
+      <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
+        <h2>Moves this year</h2>
+        <button class="btn btn-solid" onclick="live()">Live the year</button>
+      </div>
+      <div class="grid g2" id="moves"></div>
+    </div>
+    <div class="grid" style="margin-top:1.2rem;grid-template-columns:1.4fr 1fr">
+      <div class="card"><h3>The line</h3><canvas id="chart"></canvas></div>
+      <div class="card"><h3>Log</h3><div id="log" class="muted" style="font-size:.9rem;max-height:14rem;overflow:auto"></div></div>
+    </div>
+  </div>
+
+  <div id="end" class="screen" style="text-align:center;padding:3rem 0">
+    <p class="kicker" id="endK"></p>
+    <h1 id="endH"></h1>
+    <p class="muted" id="endP" style="margin:1rem auto;max-width:28rem"></p>
+    <div id="endBadges" style="margin:1rem 0"></div>
+    <button class="btn btn-solid" onclick="reset()">Another life</button>
+  </div>
+</div>
+<div id="toast" style="position:fixed;bottom:1rem;right:1rem;display:none;background:var(--elev);border:1px solid var(--line);padding:.7rem 1rem;border-radius:.7rem"></div>
+<script>
+const KEY="worth-adventure-v2";
+const LBASE={lean:34,comfortable:56,splashy:88};
+const SCEN=[
+  {id:"graduate",title:"Fresh diploma",kicker:"Age 23",body:"First paycheck, loans, a used car. Time is the asset.",d:{age:23,income:58,cash:6,stocks:4,home:0,mort:0,stu:32,cc:3,veh:8,life:"lean",kids:0}},
+  {id:"midcareer",title:"Mid-career grind",kicker:"Age 35",body:"A house, a 401(k), a card you keep meaning to kill.",d:{age:35,income:95,cash:22,stocks:90,home:380,mort:260,stu:8,cc:9,veh:18,life:"comfortable",kids:0}},
+  {id:"highearner",title:"High earner",kicker:"Age 41",body:"Income is easy. Lifestyle creep is the boss fight.",d:{age:41,income:185,cash:45,stocks:310,home:720,mort:480,stu:0,cc:6,veh:42,life:"splashy",kids:0}},
+  {id:"freshstart",title:"Fresh start",kicker:"Age 38",body:"Split, restart, one kid, thin cash. Discipline is the plot.",d:{age:38,income:72,cash:8,stocks:18,home:0,mort:0,stu:12,cc:11,veh:9,life:"lean",kids:1}}
+];
+const ACTS=[
+  ["paycc","Kill card debt","Highest rate first.","good"],
+  ["paystu","Student loans","Extra principal.","good"],
+  ["payloan","Other loans","Auto or leftover notes.","good"],
+  ["paymort","Mortgage extra","Toward the house.","good"],
+  ["stocks","Buy stocks","Put cash to work.","good"],
+  ["bonds","Buy bonds","Ballast.","n"],
+  ["house","Buy a home","$55k down.","n"],
+  ["rental","Buy a rental","$48k down.","n"],
+  ["hustle","Scale a hustle","$3k to start or grow.","good"],
+  ["course","Skill up","$4k, income +7%.","good"],
+  ["sellcar","Sell a car","Stop depreciation.","good"],
+  ["buycar","New car on loan","Looks like wealth.","risk"],
+  ["lean","Go lean","Cut the burn.","good"],
+  ["comf","Live comfortable","Middle path.","n"],
+  ["splash","Live large","Lifestyle inflation.","risk"]
+];
+let S=null, undoS=null, scenario="midcareer", rngN=1;
+function rnd(){let a=(S.seed+rngN*9973)|0;rngN++;a=Math.imul(a^a>>>15,1|a);a=a+Math.imul(a^a>>>7,61|a)^a;return ((a^a>>>14)>>>0)/4294967296}
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function rk(n){return Math.round(n*10)/10}
+function money(k){const s=k<0?"-":"";const n=Math.abs(k);return n>=1000?s+"$"+(n/1000).toFixed(2)+"M":s+"$"+n.toFixed(1)+"k"}
+function nw(s){return s.cash+s.stocks+s.bonds+s.home+s.rental+s.veh-(s.mort+s.rmort+s.aloan+s.stu+s.cc+s.oth)}
+function debt(s){return s.mort+s.rmort+s.aloan+s.stu+s.cc+s.oth}
+function fireN(s){return s.exp*25}
+function fireP(s){const t=fireN(s);return t<=0?0:clamp(100*(s.stocks+s.bonds)/t,0,999)}
+function expOf(life,kids,y){return (LBASE[life]+kids*11)*Math.pow(1.026,y)}
+function tax(inc){return Math.min(inc,176)*0.0765+inc*(0.1+0.18*clamp(inc/220,0,1))}
+function amort(bal,rate,yrs,extra=0){if(bal<.05)return {pay:0,nb:0,yl:0};const r=rate/12,n=Math.max(1,Math.round(yrs*12));const m=(bal*r)/(1-Math.pow(1+r,-n));const pay=m*12,int=bal*rate,prin=Math.min(bal,Math.max(0,pay-int)+extra);const nb=Math.max(0,bal-prin);return {pay,nb,yl:nb<.05?0:Math.max(0,yrs-1)}}
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";setTimeout(()=>el.style.display="none",1800)}
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("on"));document.getElementById(id).classList.add("on")}
+function snap(){return JSON.parse(JSON.stringify(S))}
+function create(){
+  const sc=SCEN.find(x=>x.id===scenario); const d=sc.d;
+  rngN=1;
+  S={seed:(Date.now()>>>0),name:document.getElementById("name").value||"Alex",age:d.age,start:d.age,year:2026,income:d.income,exp:expOf(d.life,d.kids,0),life:d.life,cash:d.cash,stocks:d.stocks,bonds:0,home:d.home,mort:d.mort,mY:d.mort?27:0,rental:0,rmort:0,rY:0,rin:0,veh:d.veh,aloan:d.veh>15?Math.round(d.veh*.45):0,aY:d.veh>15?4:0,stu:d.stu,cc:d.cc,oth:0,hustle:0,kids:d.kids,job:"employed",unemp:0,market:"steady",hist:[],log:[sc.title+" begins."],badges:[],score:0,phase:"year",event:null,sum:null,contrib:.08};
+  S.hist.push({age:S.age,nw:nw(S)});
+  maybeEvent();
+}
+function maybeEvent(){
+  if(Math.random()<0.55){
+    const pool=[];
+    if(S.job==="employed") pool.push({t:"They asked you to lead the messy team",b:"A raise with more hours.",c:[{l:"Take it",fn(){S.income*=1.12}},{l:"Stay put",fn(){}}]});
+    if(S.job==="employed"&&S.age<60) pool.push({t:"The reorg had your name on it",b:"Severance is three months.",c:[{l:"Take severance",fn(){S.cash+=S.income*.25;S.job="unemployed";S.unemp=0}}]});
+    pool.push({t:"A relative left you a quiet envelope",b:"Enough to change a year.",c:[{l:"Invest it",fn(){S.stocks+=18}},{l:"Hold cash",fn(){S.cash+=18}},{l:"Kill card debt",fn(){S.cc=Math.max(0,S.cc-18)}}]});
+    pool.push({t:"The deductible arrived first",b:"This is why the cash pile exists.",c:[{l:"Pay cash",fn(){S.cash=Math.max(0,S.cash-11)}},{l:"Float the card",fn(){S.cc+=11}}]});
+    if(S.veh>5) pool.push({t:"The transmission made a decision",b:"Repair, replace, or go light.",c:[{l:"Repair -$6k",fn(){S.cash=Math.max(0,S.cash-6)}},{l:"Replace on loan",fn(){S.veh+=12;S.aloan+=22;S.aY=5}}]});
+    if(S.job==="employed") pool.push({t:"A bonus you did not pre-spend",b:"Easiest wealth of the year.",c:[{l:"Invest",fn(){S.stocks+=12}},{l:"Hold cash",fn(){S.cash+=12}}]});
+    if(S.home>50) pool.push({t:"The roof filed a complaint",b:"Pay it or watch the asset rot.",c:[{l:"Fix it",fn(){S.cash=Math.max(0,S.cash-14);S.home+=10}},{l:"Patch",fn(){S.cash=Math.max(0,S.cash-4);S.home=Math.max(0,S.home-8)}}]});
+    if(pool.length){S.event=pool[Math.floor(rnd()*pool.length)];S.phase="event"}
+  }
+}
+function can(id){
+  if(id==="paycc") return S.cc>.2&&S.cash>=1?"":"No card / cash";
+  if(id==="paystu") return S.stu>.2&&S.cash>=1?"":"No loans";
+  if(id==="payloan") return (S.oth+S.aloan)>.2&&S.cash>=1?"":"No loans";
+  if(id==="paymort") return S.mort>.2&&S.cash>=5?"":"Need $5k";
+  if(id==="stocks"||id==="bonds") return S.cash>=2?"":"Need cash";
+  if(id==="house") return S.home>10?"Have a home":S.cash>=55?"":"Need $55k";
+  if(id==="rental") return S.rental>10?"Have one":S.cash>=48?"":"Need $48k";
+  if(id==="hustle") return S.hustle>=28?"Maxed":S.cash>=3?"":"Need $3k";
+  if(id==="course") return S.cash>=4?"":"Need $4k";
+  if(id==="sellcar") return S.veh>=4?"":"No car";
+  if(id==="lean") return S.life==="lean"?"Already":"";
+  if(id==="comf") return S.life==="comfortable"?"Already":"";
+  if(id==="splash") return S.life==="splashy"?"Already":"";
+  return "";
+}
+function act(id){
+  const w=can(id); if(w){toast(w);return}
+  undoS=snap();
+  const pay=(cap,field)=>{const n=Math.min(cap,S[field],S.cash);S[field]-=n;S.cash-=n;S.score+=16;S.log.unshift("Paid $"+n.toFixed(0)+"k")};
+  if(id==="paycc") pay(8,"cc");
+  if(id==="paystu") pay(8,"stu");
+  if(id==="payloan"){if(S.aloan>S.oth) pay(8,"aloan"); else pay(8,"oth")}
+  if(id==="paymort") pay(15,"mort");
+  if(id==="stocks"){const n=Math.min(15,S.cash-1);S.cash-=n;S.stocks+=n;S.log.unshift("Bought stocks")}
+  if(id==="bonds"){const n=Math.min(12,S.cash-1);S.cash-=n;S.bonds+=n}
+  if(id==="house"){S.cash-=55;S.home=320;S.mort=256;S.mY=30;S.exp=Math.max(28,S.exp-10);badge("Keys")}
+  if(id==="rental"){S.cash-=48;S.rental=210;S.rmort=158;S.rY=30;S.rin=9;badge("Landlord")}
+  if(id==="hustle"){S.cash-=3;S.hustle=Math.min(32,S.hustle+8);badge("Hustle")}
+  if(id==="course"){S.cash-=4;S.income*=1.07}
+  if(id==="sellcar"){const p=Math.max(3,S.veh*.7);S.veh=Math.max(0,S.veh-p);const l=Math.min(S.aloan,p);S.aloan-=l;S.cash+=p-l}
+  if(id==="buycar"){S.veh+=28;S.aloan+=26;S.aY=5;S.score-=16}
+  if(id==="lean"){S.life="lean";S.exp=expOf("lean",S.kids,S.age-S.start)}
+  if(id==="comf"){S.life="comfortable";S.exp=expOf("comfortable",S.kids,S.age-S.start)}
+  if(id==="splash"){S.life="splashy";S.exp=expOf("splashy",S.kids,S.age-S.start);S.score-=8}
+  render();
+}
+function badge(b){if(!S.badges.includes(b)){S.badges.push(b);S.score+=40}}
+function live(){
+  undoS=snap();
+  const r=rnd();
+  let m="steady",st=.07,bd=.03;
+  if(r<.08){m="crash";st=-.28+rnd()*.12;bd=.03}
+  else if(r<.22){m="bear";st=-.08+rnd()*.1;bd=.035}
+  else if(r<.34){m="stagflation";st=-.02+rnd()*.08;bd=.05}
+  else if(r<.62){m="boom";st=.14+rnd()*.14;bd=.02}
+  else {st=.06+rnd()*.07}
+  S.market=m; S.stocks*=1+st; S.bonds*=1+bd; S.cash*=1.032;
+  if(S.home) S.home*=1.03; if(S.rental) S.rental*=1.028; S.veh*=.88; S.rin*=1.02;
+  const notes=[m==="crash"?"A real crash.":m==="boom"?"Risk was paid.":m==="bear"?"A grinding year.":"A quiet compounding year."];
+  if(S.job==="unemployed"){S.unemp++; if(S.unemp>=1 && rnd()<.7){S.job="employed";S.unemp=0;S.income*=.92;notes.push("New work, slightly lower pay.")}}
+  const gross=(S.job==="employed"?S.income:0)+S.hustle+S.rin;
+  if(S.job==="employed") S.income*=1.02+ (rnd()<.12?0.04:0);
+  const taxes=tax(gross);
+  const contrib=S.job==="employed"?S.income*S.contrib:0;
+  const match=S.job==="employed"?Math.min(contrib,S.income*.03):0;
+  S.stocks+=contrib+match;
+  const mort=amort(S.mort,.065,S.mY); S.mort=mort.nb; S.mY=mort.yl;
+  const rm=amort(S.rmort,.07,S.rY); S.rmort=rm.nb; S.rY=rm.yl;
+  const au=amort(S.aloan,.072,S.aY); S.aloan=au.nb; S.aY=au.yl;
+  const stuPay=S.stu>0?Math.max(S.stu*.04,1.2):0; S.stu=Math.max(0,S.stu*1.055-stuPay);
+  const ccMin=S.cc>0?Math.max(S.cc*.03,.6):0; S.cc=Math.max(0,S.cc*1.22-ccMin);
+  const othPay=S.oth>0?Math.max(S.oth*.08,.8):0; S.oth=Math.max(0,S.oth*1.07-othPay);
+  S.exp=expOf(S.life,S.kids,S.age-S.start+1);
+  const ds=mort.pay+rm.pay+au.pay+stuPay+ccMin+othPay;
+  let sav=gross-taxes-S.exp-ds-contrib;
+  S.cash+=sav;
+  if(S.cash<0){const need=-S.cash; const sell=Math.min(S.stocks,need*1.18); S.stocks-=sell; S.cash+=sell*.85; notes.push("Sold investments to cover a hole.")}
+  if(S.cash<0 && S.bonds>0){const sell=Math.min(S.bonds,-S.cash); S.bonds-=sell; S.cash+=sell}
+  if(S.cash<-8){S.cc+=-S.cash; S.cash=0; notes.push("The card caught the fall.")}
+  S.age++; S.year++;
+  ["cash","stocks","bonds","home","mort","rental","rmort","veh","aloan","stu","cc","oth","income","exp"].forEach(k=>S[k]=rk(Math.max(0,S[k])));
+  const n=nw(S); S.score+=Math.round(n/20)+4;
+  if(S.cc<.2) badge("Card-free"); if(n>=100) badge("Six figures"); if(n>=500) badge("Half million"); if(n>=1000) badge("Million"); if(fireP(S)>=100) badge("FU number");
+  S.sum={m,st,sav,taxes,n,notes,ds};
+  S.hist.push({age:S.age,nw:n});
+  S.log.unshift("Age "+S.age+": "+m+" year.");
+  if(S.cc>80 && n<-40){S.phase="lose"; showEnd(); return}
+  if(S.age>=67){S.phase=(S.stocks+S.bonds>=S.exp*18 || n>=S.exp*22)?"win":"lose"; if(S.phase==="win") badge("Retired"); showEnd(); return}
+  if(fireP(S)>=100 && S.age>=S.start+8){S.phase="win"; badge("FIRE"); showEnd(); return}
+  S.phase="recap"; save(); render();
+}
+function showEnd(){save(); show("end"); document.getElementById("endK").textContent=S.phase==="win"?"Optional work":"The ledger closed"; document.getElementById("endH").textContent=S.phase==="win"?"You crossed the number":"The years ran out"; document.getElementById("endP").textContent="Age "+S.age+". Net worth "+money(nw(S))+"."; document.getElementById("endBadges").innerHTML=S.badges.map(b=>'<span class="badge">'+b+"</span> ").join("")}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({S,rngN}))}catch(e){}}
+function continueSave(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null"); if(!x) return; S=x.S; rngN=x.rngN||1; show(S.phase==="win"||S.phase==="lose"?"end":"play"); if(S.phase==="win"||S.phase==="lose") showEnd(); else render()}catch(e){}}
+function undo(){if(!undoS){toast("Nothing to undo");return} S=undoS; undoS=null; render()}
+function reset(){localStorage.removeItem(KEY); S=null; show("title"); boot()}
+function start(){create(); show("play"); render()}
+function pick(id){scenario=id; document.querySelectorAll("[data-sc]").forEach(el=>el.style.borderColor=el.dataset.sc===id?"var(--accent)":"var(--line)")}
+function boot(){
+  document.getElementById("continueBtn").style.display=localStorage.getItem(KEY)?"inline-flex":"none";
+  document.getElementById("scenarios").innerHTML=SCEN.map(s=>`<button class="card" data-sc="${s.id}" onclick="pick('${s.id}')" style="text-align:left;border:1px solid var(--line)"><p class="kicker">${s.kicker}</p><h3>${s.title}</h3><p class="muted" style="margin-top:.4rem">${s.body}</p></button>`).join("");
+  pick("midcareer");
+}
+function render(){
+  if(!S) return;
+  document.getElementById("meta").textContent=S.name+" · Age "+S.age+" · "+S.year;
+  document.getElementById("nw").textContent=money(nw(S));
+  document.getElementById("fireline").textContent="FIRE "+fireP(S).toFixed(0)+"% of "+money(fireN(S));
+  document.getElementById("firebar").style.width=Math.min(100,fireP(S))+"%";
+  const cells=[["Cash",money(S.cash),(S.cash/(S.exp/12)).toFixed(1)+" months"],["Invested",money(S.stocks+S.bonds),"Stocks "+money(S.stocks)],["Income",money(S.income+S.hustle+S.rin),S.job],["Debt",money(debt(S)),"Score "+Math.round(S.score)]];
+  document.getElementById("stats").innerHTML=cells.map(c=>`<div class="card stat"><p class="kicker">${c[0]}</p><b class="tabnums">${c[1]}</b><p class="muted">${c[2]}</p></div>`).join("");
+  const ev=document.getElementById("eventBox");
+  if(S.phase==="event"&&S.event){
+    ev.style.display="block";
+    ev.innerHTML=`<p class="kicker">This year, uninvited</p><h2>${S.event.t}</h2><p class="muted">${S.event.b}</p>`+S.event.c.map((c,i)=>`<button class="btn btn-ghost choice" onclick="choose(${i})">${c.l}</button>`).join("");
+  } else ev.style.display="none";
+  const rc=document.getElementById("recapBox");
+  if(S.phase==="recap"&&S.sum){
+    rc.style.display="block";
+    rc.innerHTML=`<h2>Year recap</h2><p class="muted">${S.sum.m} · stocks ${(S.sum.st*100).toFixed(1)}% · saved ${money(S.sum.sav)}</p><p class="muted">${S.sum.notes.join(" ")}</p><button class="btn btn-solid" style="margin-top:.8rem" onclick="nextYear()">Face the next year</button>`;
+  } else rc.style.display="none";
+  document.getElementById("yearBox").style.display=S.phase==="year"?"block":"none";
+  document.getElementById("moves").innerHTML=ACTS.map(([id,l,b])=>{const w=can(id);return `<button class="move" ${w?"disabled":""} onclick="act('${id}')"><div class="row" style="justify-content:space-between"><strong>${l}</strong><span class="why">${w}</span></div><p class="muted" style="font-size:.85rem">${b}</p></button>`}).join("");
+  document.getElementById("log").innerHTML=(S.log.slice(0,12).map(x=>`<p>${x}</p>`).join(""))+(S.badges.length?`<p style="margin-top:.6rem">${S.badges.map(b=>'<span class="badge">'+b+"</span> ").join("")}</p>`:"");
+  draw(); save();
+}
+function choose(i){undoS=snap(); S.event.c[i].fn(); S.event=null; S.phase="year"; S.log.unshift("You answered the year."); render()}
+function nextYear(){S.phase="year"; maybeEvent(); render()}
+function draw(){
+  const c=document.getElementById("chart"), x=c.getContext("2d"), w=c.width=c.clientWidth*2, h=c.height=220*2;
+  x.scale(2,2); const W=c.clientWidth,H=220;
+  x.clearRect(0,0,W,H);
+  const d=S.hist; if(d.length<2){x.fillStyle="#6e6a64";x.fillText("Live a year to see the curve.",16,H/2);return}
+  const ys=d.map(p=>p.nw), min=Math.min(...ys,0), max=Math.max(...ys,1);
+  x.strokeStyle="#2a2b32"; x.beginPath(); for(let i=0;i<4;i++){const y=20+i*(H-40)/3; x.moveTo(8,y); x.lineTo(W-8,y)} x.stroke();
+  x.strokeStyle="#8fa39a"; x.lineWidth=2; x.beginPath();
+  d.forEach((p,i)=>{const X=16+i*(W-32)/Math.max(1,d.length-1); const Y=H-20-((p.nw-min)/(max-min||1))*(H-40); i?x.lineTo(X,Y):x.moveTo(X,Y)});
+  x.stroke();
+}
+boot();
+</script>
+</body>
+</html>

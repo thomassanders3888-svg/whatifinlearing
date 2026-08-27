@@ -14,15 +14,16 @@
   --sans:"Figtree",system-ui,sans-serif;--display:"Fraunces",Georgia,serif;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 var(--sans);min-height:100%}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 var(--sans);min-height:100%;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.03em;font-weight:600;margin:0}
 a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0}
-.wrap{max-width:28rem;margin:0 auto;padding:1.1rem 1.2rem 7rem}
+button,textarea,input{font:inherit;color:inherit}
+button{background:none;border:0}
+.wrap{max-width:28rem;margin:0 auto;padding:1.15rem 1.2rem 7rem}
 .kicker{font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .muted{color:var(--muted)}
 .card{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 80%,transparent);border-radius:1.25rem}
-.pill{display:inline-flex;align-items:center;gap:.4rem;min-height:2.75rem;padding:0 1rem;border-radius:999px;font-size:.875rem;font-weight:600}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:2.75rem;padding:0 1rem;border-radius:999px;font-size:.875rem;font-weight:600}
 .week{display:flex;gap:.2rem;padding:.4rem}
 .wday{flex:1;display:flex;flex-direction:column;align-items:center;padding:.4rem 0;border-radius:.85rem;min-height:3.4rem}
 .wday .l{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -31,10 +32,10 @@ button{font:inherit;color:inherit;background:none;border:0}
 .hero{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;background:var(--terra);color:var(--terra-fg);border-radius:1.25rem;padding:1.2rem 1.25rem;margin-top:1.1rem}
 .hero .sub{opacity:.75;font-size:.875rem;margin-top:.25rem}
 .list{overflow:hidden}
-.row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:3.25rem;padding:.75rem 1rem;border-top:1px solid var(--line)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:3.25rem;padding:.85rem 1rem;border-top:1px solid var(--line)}
 .row:first-child{border-top:0}
 .time{font-variant-numeric:tabular-nums;font-size:.75rem;color:var(--muted)}
-.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:0 .9rem max(.75rem,env(safe-area-inset-bottom));pointer-events:none}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:0 .9rem max(.75rem,env(safe-area-inset-bottom));pointer-events:none;z-index:20}
 .nav ul{pointer-events:auto;display:flex;width:100%;max-width:28rem;gap:.2rem;padding:.2rem;margin:0;list-style:none;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:999px;box-shadow:0 8px 32px -12px rgba(31,24,20,.28)}
 .nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;min-height:3rem;border-radius:999px;font-size:.7rem;font-weight:500;color:var(--muted)}
 .nav a.on{background:var(--deep);color:var(--fg)}
@@ -48,66 +49,100 @@ button{font:inherit;color:inherit;background:none;border:0}
 .switch.on{background:var(--sage)}
 .switch i{position:absolute;top:.2rem;left:.25rem;width:1.55rem;height:1.55rem;border-radius:999px;background:var(--surface);transition:transform .2s}
 .switch.on i{transform:translateX(1.4rem)}
-input[type=time]{height:2.5rem;border:0;border-radius:.75rem;background:var(--deep);padding:0 .7rem;font:inherit;font-variant-numeric:tabular-nums}
+input[type=time]{height:2.5rem;border:0;border-radius:.75rem;background:var(--deep);padding:0 .7rem;font-variant-numeric:tabular-nums}
 .step{display:flex;gap:.75rem;padding:.8rem 1rem;margin:.45rem 0}
 .n{width:1.75rem;height:1.75rem;border-radius:999px;background:var(--deep);display:grid;place-items:center;font-size:.75rem;font-weight:600;flex-shrink:0}
-.cta{position:fixed;left:0;right:0;bottom:5.5rem;display:flex;justify-content:center;padding:0 1.2rem;pointer-events:none}
+.cta{position:fixed;left:0;right:0;bottom:5.5rem;display:flex;justify-content:center;padding:0 1.2rem;pointer-events:none;z-index:15}
 .cta button{pointer-events:auto;width:100%;max-width:28rem}
-textarea{width:100%;border:1px solid var(--line);border-radius:1.25rem;padding:.85rem 1rem;font:inherit;background:var(--surface);min-height:6.5rem}
+textarea{width:100%;border:1px solid var(--line);border-radius:1.25rem;padding:.85rem 1rem;background:var(--bg);min-height:6.5rem;line-height:1.5}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
 .cal button{min-height:2.6rem;border-radius:999px;font-variant-numeric:tabular-nums}
+.chip{min-height:2.4rem;padding:0 .85rem;border-radius:999px;background:var(--deep);font-size:.85rem;font-weight:500}
+.chip.on{background:var(--terra);color:var(--terra-fg)}
+.clim{display:flex;gap:.4rem}
+.clim button{flex:1;min-height:3.4rem;border-radius:.85rem;background:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.clim button.on{background:var(--terra);color:var(--terra-fg)}
+.enter{animation:enter .28s cubic-bezier(.22,1,.36,1)}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.enter{animation:none}}
 </style>
 </head>
 <body>
-<div class="wrap" style="padding-top:.4rem"><a href="/" class="muted" style="font-size:.8rem;font-weight:500">WhatIfInlearing</a></div>
-<div class="wrap" id="app"></div>
+<div class="wrap enter" id="app"></div>
 <nav class="nav"><ul>
   <a href="#/" id="n-t">Today</a>
-  <a href="#/plan" id="n-p">Plan</a>
+  <a href="#/journal" id="n-j">Journal</a>
   <a href="#/learn" id="n-l">Learn</a>
-  <a href="#/alerts" id="n-a">Alerts</a>
+  <a href="#/plan" id="n-p">Plan</a>
 </ul></nav>
 <script>
 const FOCUS=["Shared meaning","Love maps","Fondness","Turn toward","Influence","Solvable problems","Gridlock + date"];
 const FOCUS_ID=["weekly-meaning","weekly-love-maps","weekly-fondness","weekly-turn-toward","weekly-influence","weekly-solvable","weekly-gridlock"];
 const ACT={
-  "daily-cherish":{title:"Morning cherish",min:3,level:"Fondness",sum:"Name one specific thing you admire before the day takes over.",why:"A living culture of appreciation is the antidote to contempt and keeps the 5:1 climate.",steps:["Before phones, name one concrete appreciation.","Tell them: I noticed… and it made me feel…","If they are not there, send a short note."],prompts:["One thing they did recently that I still respect is…","A quality I would miss overnight is…"],script:"I noticed you ______ yesterday. I don’t say it enough."},
-  "daily-bids":{title:"Sliding-door watch",min:5,level:"Turn toward",sum:"Trust is built when you turn toward a sigh, a look, a comment.",why:"Masters turn toward about 86% of bids. Missing them is how a betrayal metric grows.",steps:["Notice three bids today.","Pause. Put the phone down. Face them.","Respond to the feeling, not just the content."],prompts:["A bid I almost missed was…","One way I can turn toward tonight is…"]},
-  "daily-stress":{title:"Stress-reducing conversation",min:20,level:"ATTUNE",sum:"Twenty minutes about the outside world. Listen. Do not fix unless asked.",why:"ATTUNE is Awareness, Turning toward, Tolerance, Understanding, Non-defensive, Empathy.",steps:["Phones away. Ten minutes each.","Ask, reflect, take their side against the world.","No advice until invited."],prompts:["What was the most stressful part of your day?","How can I be on your team — not as a fixer?"],script:"I’m just going to listen. Tell me about the day outside of us."},
+  "daily-cherish":{title:"Morning cherish",min:3,level:"Fondness",sum:"Name one specific thing you admire before the day takes over.",why:"Appreciation is the antidote to contempt and keeps the 5:1 climate.",steps:["Before phones, name one concrete appreciation.","Tell them: I noticed… and it made me feel…","If they are not there, send a short note."],prompts:["One thing they did recently that I still respect is…","A quality I would miss overnight is…"],script:"I noticed you ______ yesterday. I don’t say it enough."},
+  "daily-bids":{title:"Sliding-door watch",min:5,level:"Turn toward",sum:"Trust is built when you turn toward a sigh, a look, a comment.",why:"Masters turn toward about 86% of bids.",steps:["Notice three bids today.","Pause. Put the phone down. Face them.","Respond to the feeling, not just the content."],prompts:["A bid I almost missed was…","One way I can turn toward tonight is…"]},
+  "daily-stress":{title:"Stress-reducing conversation",min:20,level:"ATTUNE",sum:"Twenty minutes about the outside world. Listen. Do not fix unless asked.",why:"ATTUNE is Awareness, Turning toward, Tolerance, Understanding, Non-defensive, Empathy.",steps:["Phones away. Ten minutes each.","Ask, reflect, take their side against the world.","No advice until invited."],prompts:["What was the most stressful part of your day?"],script:"I’m just going to listen. Tell me about the day outside of us."},
   "daily-kiss":{title:"Ritual of connection",min:2,level:"Shared meaning",sum:"A six-second kiss or a reliable hello. Predictable warmth is the wall of trust.",why:"Daily rituals answer: will you be there for me?",steps:["Pick one ritual and keep it consistent.","Six seconds — long enough you cannot fake it.","If you fought, the ritual still happens."],prompts:["Our current hello/goodbye is…"]},
   "weekly-love-maps":{title:"Love-map hour",min:25,level:"Principle 1",sum:"Update the inner map of their world this week.",why:"Without a current map, bids get missed.",steps:["Each answers three questions.","Write one new fact.","End with one supportive act this week."],prompts:["What is weighing on you that I might not see?"]},
-  "weekly-fondness":{title:"Fondness scan",min:15,level:"Principle 2",sum:"Scan for what you respect. Say it out loud.",why:"Contempt cannot grow in a climate of respect.",steps:["List three specific appreciations.","Share one.","Catch yourself if a trash thought appears."],prompts:["A quality I admire today is…"]},
+  "weekly-fondness":{title:"Fondness scan",min:15,level:"Principle 2",sum:"Scan for what you respect. Say it out loud.",why:"Contempt cannot grow in a climate of respect.",steps:["List three specific appreciations.","Share one.","Catch a trash thought and rewrite it."],prompts:["A quality I admire today is…"]},
   "weekly-turn-toward":{title:"Bid practice",min:20,level:"Principle 3",sum:"Practice turning toward on purpose.",why:"Tiny doors decide the marriage.",steps:["Name a recent miss.","Repair it.","Set a bid you will answer tonight."],prompts:["A bid I turned away from was…"]},
   "weekly-influence":{title:"Accept influence",min:20,level:"Principle 4",sum:"Let them change your mind on something small.",why:"Shared power is a trust behavior.",steps:["Pick a small decision.","Ask what they prefer.","Do it their way once, without scorekeeping."],prompts:["Where do I refuse to be influenced?"]},
   "weekly-solvable":{title:"Solve one solvable",min:25,level:"Principle 5",sum:"Soft start-up, repair, compromise.",why:"Harsh start-up predicts failure more than the topic.",steps:["I feel X about Y and I need Z.","Take a break if flooded.","Leave with one experiment."],prompts:["A problem that is actually solvable this week is…"]},
   "weekly-gridlock":{title:"Dreams in conflict",min:30,level:"Principle 6",sum:"Find the dream under the position.",why:"About 69% of problems are perpetual.",steps:["Each states the dream, not the demand.","Ask: what does this stand for?","Honor both dreams in a temporary compromise."],prompts:["The dream under my side is…"]},
-  "weekly-date":{title:"Protected date",min:120,level:"Principle 6",sum:"Time together that is not logistics.",why:"Friendship is the soil the house grows in.",steps:["Protect the time.","No problem-solving.","End with one appreciation."],prompts:["What would feel like a date for us, not a task?"]},
+  "weekly-date":{title:"Protected date",min:120,level:"Principle 6",sum:"Time together that is not logistics.",why:"Friendship is the soil the house grows in.",steps:["Protect the time.","No problem-solving.","End with one appreciation."],prompts:["What would feel like a date, not a task?"]},
   "weekly-meaning":{title:"State of the Union",min:60,level:"Principle 7",sum:"Appreciations, one issue, week scan, shared meaning.",why:"The weekly meeting keeps the culture current.",steps:["Five minutes of appreciation.","One issue with a soft start.","What shall we try this week?"],prompts:["What felt like us this week?"]}
 };
 const LESSONS=[
-  {s:"attune",g:"trust",t:"ATTUNE — how trust is built",k:"Science of Trust",m:7,b:["Trust is acting to raise your partner’s payoff, not yours alone. ATTUNE: Awareness, Turning toward, Tolerance, Understanding, Non-defensive, Empathy.","When you’re upset, the world stops and I listen."],p:"daily-stress"},
-  {s:"sliding",g:"trust",t:"Sliding-door moments",k:"Science of Trust",m:5,b:["Bids are brief. Masters turn toward about 86% of the time; couples who later divorced about 33%.","Trust is not declared. It is showing up for a sigh."],p:"daily-bids"},
-  {s:"ratio",g:"trust",t:"The 5:1 climate",k:"Science of Trust",m:4,b:["Stable couples keep about five positives for every negative during conflict.","You cannot fake the ratio if friendship is empty."]},
+  {s:"sound-house",g:"principles",t:"The Sound Relationship House",k:"The model",m:6,b:["Floors from the ground: love maps, fondness, turning toward, positive perspective, managing conflict, life dreams, shared meaning.","Two walls hold it: trust (“you have my back”) and commitment (cherish this, don’t scan for better)."]},
+  {s:"love-maps",g:"principles",t:"Principle 1 — Love maps",k:"Seven principles",m:5,p:"weekly-love-maps",b:["A love map is living knowledge of their inner world. Stale maps make partners feel invisible.","Ask questions you do not already know the answer to."]},
+  {s:"fondness",g:"principles",t:"Principle 2 — Fondness",k:"Seven principles",m:5,p:"weekly-fondness",b:["Fondness is scanning for what is respectable. Contempt is the strongest predictor of divorce.","A daily specific cherish is not niceness. It is a stance."]},
+  {s:"turn",g:"principles",t:"Principle 3 — Turn toward",k:"Seven principles",m:6,p:"weekly-turn-toward",b:["Bids are any reach for attention. Masters turn toward about 86% of the time; couples who later divorced about 33%.","Trust is showing up for a sigh."]},
+  {s:"influence",g:"principles",t:"Principle 4 — Accept influence",k:"Seven principles",m:5,p:"weekly-influence",b:["Let them change your mind. Shared power is trust, not losing.","Flooded people cannot accept influence. Take a twenty-minute break."]},
+  {s:"solvable",g:"principles",t:"Principle 5 — Solvable problems",k:"Seven principles",m:6,p:"weekly-solvable",b:["Soft start-up: I feel X about Y, and I need Z.","Repair attempts predict success more than never fighting."]},
+  {s:"gridlock",g:"principles",t:"Principle 6 — Gridlock",k:"Seven principles",m:6,p:"weekly-gridlock",b:["Most problems are perpetual. Find the dream under the position.","You can dislike the stance and still protect the dream."]},
+  {s:"meaning",g:"principles",t:"Principle 7 — Shared meaning",k:"Seven principles",m:5,p:"weekly-meaning",b:["Rituals, roles, goals, symbols. The State of the Union keeps the culture current."]},
+  {s:"override",g:"principles",t:"Positive sentiment override",k:"The model",m:5,b:["When friendship is full, a sharp tone is “they had a day,” not “they are against me.”","Daily cherish is how override stays positive."]},
+  {s:"rituals",g:"principles",t:"Rituals of connection",k:"Principle 7",m:5,p:"daily-kiss",b:["Hello, goodbye, meals, the six-second kiss. Keep one ritual even after a fight."]},
+  {s:"small",g:"principles",t:"Small things often",k:"Principle 3",m:4,p:"daily-bids",b:["Grand gestures do not rescue a week of missed bids. The bank account is funded in seconds."]},
+  {s:"attune",g:"trust",t:"ATTUNE — how trust is built",k:"Science of Trust",m:7,p:"daily-stress",b:["You are trustworthy when you raise your partner’s payoff, not just yours.","Awareness, Turning toward, Tolerance, Understanding, Non-defensive, Empathy."]},
+  {s:"sliding",g:"trust",t:"Sliding-door moments",k:"Science of Trust",m:5,p:"daily-bids",b:["Bids are brief. Turning toward compounds trust. Turning away, over time, is how betrayal starts."]},
+  {s:"ratio",g:"trust",t:"The 5:1 climate",k:"Science of Trust",m:4,b:["Stable couples keep about five positives for every negative during conflict. You cannot fake the ratio if friendship is empty."]},
   {s:"betrayal",g:"trust",t:"Trust vs. the betrayal metric",k:"Science of Trust",m:6,b:["Betrayal is any pattern of not having their back — not only an affair.","The opposite cascade is daily: turn toward, cherish, repair."]},
-  {s:"love-maps",g:"principles",t:"Principle 1 — Love maps",k:"Seven principles",m:5,b:["Know their inner world. Update it on purpose."],p:"weekly-love-maps"},
-  {s:"fondness",g:"principles",t:"Principle 2 — Fondness",k:"Seven principles",m:5,b:["Scan for what you admire. Contempt cannot grow there."],p:"weekly-fondness"},
-  {s:"turn",g:"principles",t:"Principle 3 — Turn toward",k:"Seven principles",m:5,b:["Most bids are small. Answer them."],p:"weekly-turn-toward"},
-  {s:"influence",g:"principles",t:"Principle 4 — Accept influence",k:"Seven principles",m:5,b:["Let them change your mind. Shared power is trust."],p:"weekly-influence"},
-  {s:"solvable",g:"principles",t:"Principle 5 — Solvable problems",k:"Seven principles",m:6,b:["Soft start-up. Repair. Compromise."],p:"weekly-solvable"},
-  {s:"gridlock",g:"principles",t:"Principle 6 — Gridlock",k:"Seven principles",m:6,b:["Most problems are perpetual. Honor the dream underneath."],p:"weekly-gridlock"},
-  {s:"meaning",g:"principles",t:"Principle 7 — Shared meaning",k:"Seven principles",m:5,b:["Rituals, roles, goals, symbols. Design them together."],p:"weekly-meaning"},
-  {s:"horsemen",g:"horsemen",t:"Four Horsemen",k:"Conflict",m:6,b:["Criticism, contempt, defensiveness, stonewalling. Antidotes: gentle start-up, appreciation, responsibility, self-soothe."],p:"weekly-solvable"}
+  {s:"flood",g:"trust",t:"Flooding and the twenty-minute break",k:"Science of Trust",m:4,b:["Flooding is a body event. Leave with a time. Do not rehearse your case. Coming back on time is trust."]},
+  {s:"clalt",g:"trust",t:"CL-ALT and the comparison trap",k:"Science of Trust",m:6,b:["“Could I do better?” plus missed bids thins commitment. Cherishing lowers the comparison. Trashing raises it."]},
+  {s:"give",g:"trust",t:"Give-to-give, not give-to-get",k:"Science of Trust",m:5,b:["Scorekeeping feels fair and slowly poisons fondness. One un-logged kindness a day."]},
+  {s:"walls",g:"trust",t:"The walls: trust and commitment",k:"The model",m:6,b:["Trust is this moment. Commitment is cherishing this relationship rather than scanning. The house needs both."]},
+  {s:"horsemen",g:"horsemen",t:"Four Horsemen",k:"Conflict",m:6,p:"weekly-solvable",b:["Criticism, contempt, defensiveness, stonewalling. Antidotes: gentle start-up, appreciation, responsibility, self-soothe."]},
+  {s:"repair",g:"horsemen",t:"Repair attempts",k:"Conflict",m:5,p:"weekly-solvable",b:["Any bid to de-escalate. Masters hear them. Agree on a private phrase in calm weather."]},
+  {s:"startup",g:"horsemen",t:"Harsh vs. soft start-up",k:"Conflict",m:5,p:"weekly-solvable",b:["How a conversation begins predicts how it ends. I feel X about Y, and I need Z."]},
+  {s:"aftermath",g:"horsemen",t:"Aftermath of a fight",k:"Conflict",m:6,b:["After twenty minutes, each describes their reality without debate. Unprocessed fights become a betrayal story."]},
+  {s:"rapoport",g:"horsemen",t:"The Gottman-Rapoport exercise",k:"Conflict",m:7,p:"weekly-influence",b:["Speaker uses I-feel-need. Listener summarizes until they hear “you got me.” Then switch. No defending."]}
 ];
+const PROMPTS=[
+  {k:"appreciation",p:"One specific thing I noticed and respected today was…"},
+  {k:"appreciation",p:"A small way they made the day easier…"},
+  {k:"bid",p:"A bid I turned toward today was…"},
+  {k:"bid",p:"A sliding-door moment I almost missed…"},
+  {k:"repair",p:"A repair I offered, or still owe, is…"},
+  {k:"repair",p:"If I restarted with a soft start-up, I would say…"},
+  {k:"dream",p:"The dream under a current gridlock is…"},
+  {k:"free",p:"How did we feel as a team today?"},
+  {k:"free",p:"What felt lonely or unseen?"}
+];
+const KIND={appreciation:"Cherish",bid:"Bid",repair:"Repair",dream:"Dream",free:"Note",climate:"Climate"};
+const CLIM=["Distant","Thin","Okay","Warm","Close"];
 const TIMES={morning:"07:30",midday:"12:30",evening:"19:00",night:"21:30"};
 function pad(n){return String(n).padStart(2,"0")}
 function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function logs(){try{return JSON.parse(localStorage.getItem("attune.logs")||"{}")}catch(e){return{}}}
 function saveLogs(x){localStorage.setItem("attune.logs",JSON.stringify(x))}
-function rem(){try{return Object.assign({on:true},JSON.parse(localStorage.getItem("attune.rem")||"{}"),{...TIMES,...JSON.parse(localStorage.getItem("attune.times")||"{}")})}catch(e){return{on:true,...TIMES}}}
-function fmt(t){const [h,m]=t.split(":").map(Number);const s=h>=12?"PM":"AM";const h12=h%12||12;return h12+":"+pad(m)+" "+s}
+function journal(){try{return JSON.parse(localStorage.getItem("attune.journal")||"[]")}catch(e){return[]}}
+function saveJ(x){localStorage.setItem("attune.journal",JSON.stringify(x.slice(0,800)))}
+function readSet(){try{return JSON.parse(localStorage.getItem("attune.read")||"[]")}catch(e){return[]}}
+function rem(){try{return Object.assign({on:true,...TIMES},JSON.parse(localStorage.getItem("attune.rem")||"{}"),JSON.parse(localStorage.getItem("attune.times")||"{}"))}catch(e){return{on:true,...TIMES}}}
+function fmt(t){const [h,m]=t.split(":").map(Number);const s=h>=12?"PM":"AM";return (h%12||12)+":"+pad(m)+" "+s}
 function dayEvents(d){
-  const r=rem();
-  const w=d.getDay();
+  const r=rem(); const w=d.getDay();
   const list=[
     {id:"daily-cherish",time:r.morning||TIMES.morning},
     {id:"daily-bids",time:r.midday||TIMES.midday},
@@ -121,8 +156,8 @@ function dayEvents(d){
 function hash(){return (location.hash.replace(/^#/,"")||"/")}
 function nav(){
   const h=hash();
-  [["n-t","/"],["n-p","/plan"],["n-l","/learn"],["n-a","/alerts"]].forEach(([id,p])=>{
-    document.getElementById(id).classList.toggle("on", p==="/" ? h==="/" : h.startsWith(p));
+  [["n-t","/"],["n-j","/journal"],["n-l","/learn"],["n-p","/plan"]].forEach(([id,p])=>{
+    const el=document.getElementById(id); if(el) el.classList.toggle("on", p==="/" ? h==="/" : h.startsWith(p));
   });
 }
 function weekHtml(sel){
@@ -147,7 +182,10 @@ function viewToday(){
   const pct=Math.round(done/ev.length*100);
   const now=Date.now();
   return `<p class="kicker">${d.toLocaleDateString(undefined,{weekday:"long"})}</p>
-    <h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Today</h1>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem">
+      <h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Today</h1>
+      <a href="#/alerts" class="muted" style="font-size:.85rem;font-weight:500">Alerts</a>
+    </div>
     ${weekHtml(d)}
     <section class="hero">
       <div>
@@ -156,7 +194,7 @@ function viewToday(){
         <p class="sub">${next?fmt(next.time)+" · "+ACT[next.id].min+" min":done+" of "+ev.length}</p>
         ${next?`<a class="pill" style="margin-top:.9rem;background:var(--surface);color:var(--fg)" href="#/do/${next.id}">Begin</a>`:""}
       </div>
-      <div style="font-size:1.4rem;font-weight:600;font-variant-numeric:tabular-nums">${pct}%</div>
+      <div style="font-size:1.35rem;font-weight:600;font-variant-numeric:tabular-nums">${pct}%</div>
     </section>
     <h2 style="margin:1.6rem 0 .8rem;font-size:1.25rem">Schedule</h2>
     ${ev.map((e,i)=>{
@@ -169,17 +207,119 @@ function viewToday(){
           <div style="display:flex;justify-content:space-between;gap:.5rem"><h3 style="font-size:1.1rem">${a.title}</h3><span class="time">${fmt(e.time)}</span></div>
           <p class="muted" style="font-size:.75rem;margin:.25rem 0">${a.min} min · ${a.level}</p>
           <p style="font-size:.9rem;color:var(--ink)">${a.sum}</p>
-          ${isNow?'<p style="color:var(--terra);font-size:.75rem;font-weight:600;margin:.4rem 0 0">Now</p>':""}
         </a></div>`;
     }).join("")}
-    <a href="#/do/${FOCUS_ID[d.getDay()]}" class="card" style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem">
+    <a href="#/do/${FOCUS_ID[d.getDay()]}" class="card" style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem;margin-top:.2rem">
       <div><p class="kicker">This week’s principle</p><h3 style="margin-top:.3rem">${FOCUS[d.getDay()]}</h3></div>
+      <span class="muted">→</span>
+    </a>
+    <a href="#/journal" class="card" style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem;margin-top:.7rem">
+      <div><p class="kicker">Journal</p><h3 style="margin-top:.3rem">Climate, cherish, a bid</h3></div>
       <span class="muted">→</span>
     </a>`;
 }
+function viewJournal(){
+  const iso=ymd(new Date());
+  const J=journal();
+  const clim=J.find(e=>e.date===iso && e.k==="climate");
+  const today=J.filter(e=>e.date===iso && e.k!=="climate");
+  const past=J.filter(e=>e.date!==iso && e.k!=="climate").slice(0,30);
+  const day=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000);
+  const daily=PROMPTS[day%PROMPTS.length];
+  window._jk=window._jk||daily.k;
+  window._jp=window._jp||daily.p;
+  return `<p class="kicker">Private to this phone</p>
+    <h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Journal</h1>
+    <div class="card" style="padding:1rem">
+      <p class="kicker">Today’s climate</p>
+      <div class="clim" style="margin-top:.75rem">
+        ${CLIM.map((lab,i)=>`<button class="${clim&&clim.n===i+1?"on":""}" onclick="setClim(${i+1},'${lab}')"><strong>${i+1}</strong><span class="muted" style="font-size:.7rem">${lab}</span></button>`).join("")}
+      </div>
+    </div>
+    <div class="card" style="padding:1rem;margin-top:.85rem">
+      <p class="kicker">Write</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0">
+        ${["appreciation","bid","repair","dream","free"].map(k=>`<button class="chip ${window._jk===k?"on":""}" onclick="pickKind('${k}')">${KIND[k]}</button>`).join("")}
+      </div>
+      <h2 style="font-size:1.25rem;line-height:1.25">${window._jp}</h2>
+      <textarea id="jbody" placeholder="A few honest lines…" style="margin-top:.8rem">${window._jb||""}</textarea>
+      <button class="pill" style="width:100%;margin-top:.8rem;background:var(--terra);color:var(--terra-fg)" onclick="saveNote()">Save to journal</button>
+    </div>
+    ${today.length?`<h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Today</h2>`+today.map(e=>`<div class="card" style="padding:1rem;margin-bottom:.5rem"><p class="kicker">${KIND[e.k]}</p><p style="margin:.4rem 0 0;color:var(--ink);font-size:.92rem">${esc(e.body)}</p></div>`).join(""):""}
+    <h2 style="margin:1.4rem 0 .6rem;font-size:1.2rem">Earlier</h2>
+    ${past.length?past.map(e=>`<div class="card" style="padding:1rem;margin-bottom:.5rem"><p class="kicker">${KIND[e.k]} · ${e.date.slice(5)}</p><p style="margin:.4rem 0 0;color:var(--ink);font-size:.92rem">${esc(e.body)}</p></div>`).join(""):`<p class="muted">Entries collect here. A few honest lines beat a perfect essay.</p>`}`;
+}
+function setClim(n,lab){
+  const iso=ymd(new Date());
+  let J=journal().filter(e=>!(e.date===iso && e.k==="climate"));
+  J.unshift({id:Date.now(),date:iso,k:"climate",n,body:lab});
+  saveJ(J); render();
+}
+function pickKind(k){
+  const ta=document.getElementById("jbody");
+  window._jb=ta?ta.value:"";
+  window._jk=k;
+  const pool=PROMPTS.filter(p=>p.k===k);
+  window._jp=(pool[Math.floor(Math.random()*pool.length)]||PROMPTS[0]).p;
+  render();
+}
+function saveNote(){
+  const ta=document.getElementById("jbody");
+  const body=(ta&&ta.value||"").trim(); if(!body) return;
+  const iso=ymd(new Date());
+  const J=journal();
+  J.unshift({id:Date.now(),date:iso,k:window._jk||"free",p:window._jp,body});
+  saveJ(J); window._jb=""; render();
+}
+function viewLearn(){
+  const read=new Set(readSet());
+  const groups=[["Seven Principles","principles"],["Science of Trust","trust"],["When it gets hard","horsemen"]];
+  return `<p class="kicker">Briefings</p><h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Learn</h1>
+    <p class="muted" style="margin-bottom:1.2rem">${read.size} of ${LESSONS.length} read · original notes, not a reprint.</p>`+
+    groups.map(([title,g])=>`<h2 style="margin:1.2rem 0 .45rem;font-size:1.2rem">${title}</h2>
+      <div class="card list">${LESSONS.filter(l=>l.g===g).map(l=>`<a class="row" href="#/lesson/${l.s}"><div style="display:flex;align-items:center;gap:.7rem"><span style="width:.45rem;height:.45rem;border-radius:99px;background:${read.has(l.s)?"var(--sage)":"var(--terra)"}"></span><div><div style="font-weight:500">${l.t}</div><div class="muted" style="font-size:.75rem">${l.k} · ${l.m} min${read.has(l.s)?" · Read":""}</div></div></div><span class="muted">›</span></a>`).join("")}</div>`).join("");
+}
+function viewLesson(s){
+  const l=LESSONS.find(x=>x.s===s); if(!l) return `<p>Missing.</p>`;
+  const r=readSet(); if(!r.includes(s)){ r.push(s); localStorage.setItem("attune.read",JSON.stringify(r)); }
+  return `<a href="#/learn" class="muted">← Learn</a>
+    <p class="kicker" style="margin-top:1.2rem">${l.k} · ${l.m} min</p>
+    <h1 style="font-size:2.05rem;line-height:.95;margin:.4rem 0 1rem">${l.t}</h1>
+    ${l.b.map(p=>`<p style="color:var(--ink);margin:0 0 1rem">${p}</p>`).join("")}
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+      ${l.p?`<a class="pill" style="background:var(--terra);color:var(--terra-fg)" href="#/do/${l.p}">Practice this today</a>`:""}
+      <a class="pill" style="background:var(--deep)" href="#/journal">Journal a line</a>
+    </div>`;
+}
+function viewDo(id){
+  const a=ACT[id]; if(!a) return `<p>Missing.</p>`;
+  const iso=ymd(new Date()); const done=!!(logs()[iso]||{})[id];
+  const note=(JSON.parse(localStorage.getItem("attune.notes")||"{}")[iso+id]||"");
+  return `<a href="#/" class="muted">← Today</a>
+    <p class="kicker" style="margin-top:1.2rem">${a.min} min · ${a.level}</p>
+    <h1 style="font-size:2.05rem;line-height:.95;margin:.4rem 0">${a.title}</h1>
+    <p style="color:var(--ink);margin:.7rem 0 1rem">${a.sum}</p>
+    <div class="card" style="padding:1rem"><p class="kicker">Why this works</p><p style="margin:.4rem 0 0;color:var(--ink);font-size:.9rem">${a.why}</p></div>
+    <h2 style="margin:1.2rem 0 .4rem;font-size:1.25rem">How</h2>
+    ${a.steps.map((s,i)=>`<div class="card step"><span class="n">${i+1}</span><p style="margin:0;font-size:.9rem;color:var(--ink)">${s}</p></div>`).join("")}
+    ${a.script?`<blockquote style="background:var(--deep);border-radius:1.25rem;padding:1rem 1.2rem;font-family:var(--display);font-size:1.2rem;margin:1rem 0">${a.script}</blockquote>`:""}
+    <h2 style="margin:1.2rem 0 .4rem;font-size:1.25rem">Prompts</h2>
+    ${a.prompts.map(p=>`<div class="card" style="padding:.85rem 1rem;margin:.4rem 0;font-size:.9rem">${p}</div>`).join("")}
+    <p style="font-weight:500;margin:1.2rem 0 .4rem">Notes</p>
+    <textarea id="note" placeholder="What did you notice?">${note}</textarea>
+    <button class="muted" style="margin-top:.4rem;font-size:.85rem;font-weight:500" onclick="noteToJournal('${id}')">Also save to journal</button>
+    <div class="cta"><button class="pill" style="justify-content:center;background:${done?"var(--sage)":"var(--terra)"};color:${done?"var(--sage-fg)":"var(--terra-fg)"}" onclick="toggle('${id}','${iso}')">${done?"Done — tap to undo":"Mark as done"}</button></div>`;
+}
+function noteToJournal(id){
+  const ta=document.getElementById("note"); const body=(ta&&ta.value||"").trim(); if(!body) return;
+  const iso=ymd(new Date());
+  const n=JSON.parse(localStorage.getItem("attune.notes")||"{}"); n[iso+id]=body; localStorage.setItem("attune.notes",JSON.stringify(n));
+  const J=journal(); J.unshift({id:Date.now(),date:iso,k:"free",p:ACT[id].title,body}); saveJ(J);
+  alert("Saved to journal");
+}
 function viewPlan(){
   const sel=window._sel||new Date();
-  const ev=dayEvents(sel); const iso=ymd(sel);
+  const ev=dayEvents(sel);
   const now=new Date();
   const first=new Date(now.getFullYear(),now.getMonth(),1);
   const start=new Date(first); start.setDate(1-first.getDay());
@@ -203,37 +343,6 @@ function viewPlan(){
       return `<a href="#/do/${e.id}" class="card" style="display:block;padding:1rem;margin-bottom:.55rem"><div style="display:flex;justify-content:space-between"><h3>${a.title}</h3><span class="time">${fmt(e.time)}</span></div><p class="muted" style="font-size:.8rem;margin-top:.2rem">${a.min} min · ${a.level}</p></a>`;
     }).join("")}</div>`;
 }
-function viewLearn(){
-  const groups=[["Seven Principles","principles"],["Science of Trust","trust"],["When it gets hard","horsemen"]];
-  return `<p class="kicker">Briefings</p><h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Learn</h1>`+
-    groups.map(([title,g])=>`<h2 style="margin:1.2rem 0 .45rem;font-size:1.2rem">${title}</h2>
-      <div class="card list">${LESSONS.filter(l=>l.g===g).map(l=>`<a class="row" href="#/lesson/${l.s}"><div><div style="font-weight:500">${l.t}</div><div class="muted" style="font-size:.75rem">${l.k} · ${l.m} min</div></div><span class="muted">›</span></a>`).join("")}</div>`).join("");
-}
-function viewLesson(s){
-  const l=LESSONS.find(x=>x.s===s); if(!l) return `<p>Missing.</p>`;
-  return `<a href="#/learn" class="muted">← Learn</a>
-    <p class="kicker" style="margin-top:1.2rem">${l.k} · ${l.m} min</p>
-    <h1 style="font-size:2.05rem;line-height:.95;margin:.4rem 0 1rem">${l.t}</h1>
-    ${l.b.map(p=>`<p style="color:var(--ink);margin:0 0 1rem">${p}</p>`).join("")}
-    ${l.p?`<a class="pill" style="background:var(--terra);color:var(--terra-fg)" href="#/do/${l.p}">Practice this today</a>`:""}`;
-}
-function viewDo(id){
-  const a=ACT[id]; if(!a) return `<p>Missing.</p>`;
-  const iso=ymd(new Date()); const done=!!(logs()[iso]||{})[id];
-  return `<a href="#/" class="muted">← Today</a>
-    <p class="kicker" style="margin-top:1.2rem">${a.min} min · ${a.level}</p>
-    <h1 style="font-size:2.05rem;line-height:.95;margin:.4rem 0">${a.title}</h1>
-    <p style="color:var(--ink);margin:.7rem 0 1rem">${a.sum}</p>
-    <div class="card" style="padding:1rem"><p class="kicker">Why this works</p><p style="margin:.4rem 0 0;color:var(--ink);font-size:.9rem">${a.why}</p></div>
-    <h2 style="margin:1.2rem 0 .4rem;font-size:1.25rem">How</h2>
-    ${a.steps.map((s,i)=>`<div class="card step"><span class="n">${i+1}</span><p style="margin:0;font-size:.9rem;color:var(--ink)">${s}</p></div>`).join("")}
-    ${a.script?`<blockquote style="background:var(--deep);border-radius:1.25rem;padding:1rem 1.2rem;font-family:var(--display);font-size:1.2rem;margin:1rem 0">${a.script}</blockquote>`:""}
-    <h2 style="margin:1.2rem 0 .4rem;font-size:1.25rem">Prompts</h2>
-    ${a.prompts.map(p=>`<div class="card" style="padding:.85rem 1rem;margin:.4rem 0;font-size:.9rem">${p}</div>`).join("")}
-    <p style="font-weight:500;margin:1.2rem 0 .4rem">Notes</p>
-    <textarea id="note" placeholder="What did you notice?">${(JSON.parse(localStorage.getItem("attune.notes")||"{}")[iso+id]||"")}</textarea>
-    <div class="cta"><button class="pill" style="justify-content:center;background:${done?"var(--sage)":"var(--terra)"};color:${done?"var(--sage-fg)":"var(--terra-fg)"}" onclick="toggle('${id}','${iso}')">${done?"Done — tap to undo":"Mark as done"}</button></div>`;
-}
 function viewAlerts(){
   const r=rem();
   return `<p class="kicker">On this phone</p><h1 style="font-size:2.1rem;line-height:.95;margin:.35rem 0 1rem">Alerts</h1>
@@ -244,15 +353,18 @@ function viewAlerts(){
       ${[["morning","Morning cherish"],["midday","Midday bids"],["evening","Evening attune"],["night","Night ritual"]].map(([k,l])=>`<label class="row"><span>${l}</span><input type="time" data-k="${k}" value="${r[k]||TIMES[k]}"/></label>`).join("")}
     </div>`;
 }
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&","<":"<",">":">"}[c]))}
 function render(){
   nav();
   const root=document.getElementById("app");
+  root.className="wrap enter";
   const h=hash();
   if(h.startsWith("/plan")) root.innerHTML=viewPlan();
   else if(h.startsWith("/learn")) root.innerHTML=viewLearn();
   else if(h.startsWith("/lesson/")) root.innerHTML=viewLesson(h.split("/")[2]);
   else if(h.startsWith("/do/")) root.innerHTML=viewDo(h.split("/")[2]);
   else if(h.startsWith("/alerts")) root.innerHTML=viewAlerts();
+  else if(h.startsWith("/journal")) root.innerHTML=viewJournal();
   else root.innerHTML=viewToday();
   bind();
 }
@@ -267,6 +379,8 @@ function bind(){
   });
   const note=document.getElementById("note");
   if(note){ note.onblur=()=>{ const h=hash(); const id=h.split("/")[2]; const iso=ymd(new Date()); const n=JSON.parse(localStorage.getItem("attune.notes")||"{}"); n[iso+id]=note.value; localStorage.setItem("attune.notes",JSON.stringify(n)); }; }
+  const jbody=document.getElementById("jbody");
+  if(jbody) jbody.oninput=()=>{ window._jb=jbody.value; };
   const tog=document.getElementById("tog");
   if(tog) tog.onclick=()=>{
     const r=rem(); r.on=!r.on; localStorage.setItem("attune.rem",JSON.stringify(r)); syncNative(r); render();
@@ -288,6 +402,5 @@ window.addEventListener("hashchange",render);
 render();
 if(window.AttuneAndroid){ const r=rem(); if(r.on) syncNative(r); }
 </script>
-<script src="/nav.js" defer></script>
 </body>
 </html>
